@@ -1,0 +1,102 @@
+[
+    {
+      "id": 1,
+      "title": "Remera Boxeador",
+      "price": 2599,
+      "code": "Addf554fga",
+      "description": "Remera de algodón talle único",
+      "thumbnail": "Sin Imagen",
+      "stock": 25,
+      "status": true
+    },
+    {
+      "id": 2,
+      "title": "Remera Gati Escondido",
+      "price": 1999,
+      "code": "aasddlls2",
+      "description": "Remera de algodón talle único",
+      "thumbnail": "Sin Imagen",
+      "stock": 98,
+      "status": true
+    },
+    {
+      "id": 3,
+      "title": "Remera Gentleman",
+      "price": 1799,
+      "code": "asfñ55fd",
+      "description": "Remera de algodón talle XL",
+      "thumbnail": "Sin Imagen",
+      "stock": 54,
+      "status": true
+    },
+    {
+      "id": 4,
+      "title": "Gorra Glitter Rosa",
+      "price": 999,
+      "code": "55df11sones",
+      "description": "Gorra con orejitas, ¡último color disponible!",
+      "thumbnail": "Sin Imagen",
+      "stock": 32,
+      "status": true
+    },
+    {
+      "id": 5,
+      "title": "Collar Silueta Gatito",
+      "price": 1759,
+      "code": "aad55f4a",
+      "description": "Dije enchapado en plata. Disponible sin cadenita",
+      "thumbnail": "Sin Imagen",
+      "stock": 12,
+      "status": true
+    },
+    {
+      "id": 6,
+      "title": "AurisBlack",
+      "price": 4329,
+      "code": "oofjs0555f",
+      "description": "Auriculares con luz",
+      "thumbnail": "Sin Imagen",
+      "stock": 32,
+      "status": true
+    },
+    {
+      "id": 7,
+      "title": "Set de Lapiceras 'Huellita'",
+      "price": 999,
+      "code": "aallsda3",
+      "description": "Lapiceras surtidas trazo azul y negro",
+      "thumbnail": "Sin Imagen",
+      "stock": 546,
+      "status": true
+    },
+    {
+      "id": 8,
+      "title": "Medias",
+      "price": 1050,
+      "code": "lasfnv00df5",
+      "description": "Medias surtidas",
+      "thumbnail": "Sin Imagen",
+      "stock": 45,
+      "status": true
+    },
+    {
+      "id": 9,
+      "title": "MoussePad",
+      "price": 2099,
+      "code": "asllffa5",
+      "description": "MoussePads de diferentes diseños!",
+      "thumbnail": "Sin Imagen",
+      "stock": 156,
+      "status": true
+    },
+    {
+      "id": 10,
+      "title": "Reloj Sueño del Árbol",
+      "price": 3399,
+      "code": "55hsd895h",
+      "description": "Reloj pintado a mano",
+      "thumbnail": "Sin Imagen",
+      "stock": 56,
+      "status": true
+    }
+  ]
