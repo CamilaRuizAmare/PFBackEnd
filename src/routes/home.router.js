@@ -5,7 +5,8 @@ const products = await productManager.getProducts();
 const homeRouter = express.Router();
 
 homeRouter.get('/', (req, res)=>{
-    res.render('index', {products});
+    const home = 'home';
+    res.render('index', {home, products});
 });
 export {products};
 export default homeRouter;
