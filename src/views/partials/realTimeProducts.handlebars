@@ -1,3 +1,17 @@
-<h4>
-    hola hola holaaaa
-</h4>
+<div class="flex">
+    <h1>Lista de productos:</h1>
+
+    {{#each products}}
+    <div class="product">
+        <ul>
+            <h2>{{this.title}}</h2>
+            <li>Precio: {{this.price}}</li>
+            <li>Descripcion: {{this.description}}</li>
+        </ul> 
+    </div>    
+    {{/each}}
+    <div id="prueba"></div>
+
+</div>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>

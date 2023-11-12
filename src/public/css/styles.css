@@ -1,14 +1,25 @@
+* {
+    box-sizing: border-box;
+}
+
 body{
     background-color: rgb(197, 197, 197)
 }
 h1{
     text-align: center;
 }
+
 .flex {
     display: flex;
     flex-direction: column;
 }
 li {
     list-style: none;
-    padding-bottom: 10px;
+    padding-bottom: 15px
+}
+
+.product {
+    margin-left: 15px;
+    width: 50%;
+    text-align: center;
 }
