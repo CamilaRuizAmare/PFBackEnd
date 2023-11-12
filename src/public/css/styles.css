@@ -17,9 +17,14 @@ li {
     list-style: none;
     padding-bottom: 15px
 }
-
 .product {
+    display: flex;
+    width: 30%;
+    border: 3px solid black;
+    margin: 4px;
     margin-left: 15px;
-    width: 50%;
-    text-align: center;
+}
+
+.imgWidth {
+    width: 20%;
 }

@@ -27,8 +27,12 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
-
 const products = await productManager.getProducts();
+
+io.on('connection', (socket) => {
+    console.log('Cliente conectado');
+    socket.emit('products', products);
+});
 
 export default io;
 
