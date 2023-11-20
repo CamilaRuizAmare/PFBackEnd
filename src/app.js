@@ -32,8 +32,14 @@ const products = await productManager.getProducts();
 io.on('connection', (socket) => {
     console.log('Cliente conectado');
     socket.emit('products', products);
+    socket.on('addProduct', async (data) => {
+        await productManager.addProduct(data);
+    });
+    socket.on('deleteProduct', async (data) => {
+        const idDeleted = await productManager.deleteProduct(data);
+        console.log(idDeleted);
+        io.emit('idDeleted', idDeleted);
+    }); 
 });
 
 export default io;
-
-
