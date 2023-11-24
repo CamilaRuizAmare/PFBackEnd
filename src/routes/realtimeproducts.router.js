@@ -1,5 +1,5 @@
 import express from 'express';
-import productManager from '../ProductManager.js';
+import productManager from '../dao/db/ProductManager.js';
 import { uploader } from '../utils.js';
 import io from '../app.js';
 

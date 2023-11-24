@@ -1,5 +1,5 @@
 import express from 'express';
-import productManager from '../ProductManager.js';
+import productManager from '../dao/db/ProductManager.js';
 import { uploader } from '../utils.js';
 const productsRouter = express.Router();
 
@@ -20,7 +20,7 @@ productsRouter.get('/', async (req, res) => {
 
 productsRouter.get('/:pid', async (req, res) => {
     try {
-        const productID = parseInt(req.params.pid, 10);
+        const productID = req.params.pid;
         const productByID = await productManager.getProductById(productID);
         if (!productByID) {
             res.status(404).json({ message: "Product not found" });
@@ -52,22 +52,12 @@ productsRouter.post('/', uploader.array('files'), async (req, res) => {
 
 productsRouter.put('/:pid', uploader.array('files'), async (req, res) => {
     try {
-        const productID = parseInt(req.params.pid, 10);
-        const productByID = await productManager.getProductById(productID);
-        const thumbnail = req.files.length > 0 ? req.files : productByID.thumbnail;
+        const productID = req.params.pid;
+        const productByID = await productManager.updateProduct(productID);
         if (!productByID) {
             res.status(404).json({ message: "Product not found" });
         } else {
-        const productUpdate = {
-            title: req.body.title || productByID.title,
-            description: req.body.description || productByID.description,
-            price: req.body.price || productByID.price,
-            stock: req.body.stock || productByID.stock,
-            code: req.body.code || productByID.code,
-            thumbnail: thumbnail
-        };
-        await productManager.updateProduct(productID, productUpdate);
-        res.status(201).json(productUpdate);
+        res.status(201).json(productByID);
         };
     }
     catch (err) {
@@ -77,7 +67,7 @@ productsRouter.put('/:pid', uploader.array('files'), async (req, res) => {
 
 productsRouter.delete('/:pid', async (req, res) => {
     try {
-        const productID = parseInt(req.params.pid, 10);
+        const productID = req.params.pid;
         const productByID = await productManager.deleteProduct(productID);
         if (!productByID) {
             res.status(404).json({ message: "Product not found" });

@@ -38,7 +38,8 @@ addProduct.addEventListener('click', (e) => {
       showConfirmButton: false,
       timer: 2000,
       timerProgressBar: true,
-    })
+    });
+    return;
   }
 
   const newProduct = {
@@ -64,7 +65,7 @@ addProduct.addEventListener('click', (e) => {
 
 deleteProduct.addEventListener('click', (e) => {
   e.preventDefault();
-  let idToDelete = parseInt(document.getElementById('id').value);
+  let idToDelete = document.getElementById('id').value;
   Swal.fire({
     title: 'Desea eliminar el producto?',
     text: 'Está a punto de eliminar un producto',
@@ -76,7 +77,6 @@ deleteProduct.addEventListener('click', (e) => {
   }).then((result) => {
     if (result.isConfirmed) {
       socket.emit('deleteProduct', idToDelete);
-      formDeleteProduct.reset();
       socket.on('idDeleted', (data) => {
         if (!data) {
           Swal.fire({
@@ -90,11 +90,12 @@ deleteProduct.addEventListener('click', (e) => {
         else {
           Swal.fire({
             title: 'Producto Borrado',
-            text: `El producto bajo el ID ${data[0].id} ha sido eliminado`,
+            text: `El producto bajo el ID ${idToDelete} ha sido eliminado`,
             icon: 'success',
             timer: 1500,
             showConfirmButton: false
           });
+          formDeleteProduct.reset();
         }
       })
     }

@@ -1,4 +1,5 @@
 import express from 'express';
+import { db } from './config/database.js';
 import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
 import {Server} from "socket.io";
@@ -6,7 +7,7 @@ import homeRouter from './routes/home.router.js'
 import realTimeRouter from './routes/realtimeproducts.router.js';
 import { productsRouter } from './routes/products.router.js';
 import { cartRouter } from './routes/cart.router.js';
-import productManager from './ProductManager.js';
+import productManager from './dao/db/ProductManager.js';
 
 const app = express();
 const port = 8080;
@@ -15,6 +16,7 @@ const httpServer = app.listen(port, () => {
 });
 
 const io = new Server(httpServer);
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,18 +29,31 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
-const products = await productManager.getProducts();
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('Cliente conectado');
+    const products = await productManager.getProducts();
     socket.emit('products', products);
     socket.on('addProduct', async (data) => {
-        await productManager.addProduct(data);
+        try {
+            const newProduct = await productManager.addProduct(data);
+            const updateProducts = await productManager.getProducts();
+            io.emit('products', updateProducts);
+        } catch (error) {
+            console.log(error.message);
+        }
     });
     socket.on('deleteProduct', async (data) => {
+        try {
         const idDeleted = await productManager.deleteProduct(data);
+        const updateProducts = await productManager.getProducts();
+        io.emit('products', updateProducts);
         console.log(idDeleted);
         io.emit('idDeleted', idDeleted);
+    }
+    catch(err) {
+        console.log('Error: ', err)
+    }
     }); 
 });
 

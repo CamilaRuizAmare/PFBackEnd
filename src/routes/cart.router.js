@@ -1,20 +1,14 @@
 import express from 'express';
-import cart from '../Cart.js';
-import productManager from '../ProductManager.js';
+import cart from '../dao/db/Cart.js';
+import productManager from '../dao/db/ProductManager.js';
+import cartModel from '../dao/models/carts.model.js';
 const cartRouter = express.Router();
 
 cartRouter.post('/', async (req, res) => {
     try {
-        const fileCart = await cart.readFile();
-        const id = fileCart.length === 0 ? 1 : fileCart[fileCart.length - 1].id + 1;
-        const cartID = {
-            id,
-            products: [],
-        };
-        fileCart.push(cartID);
-        await cart.writeFile(fileCart);
-        res.status(201).json(cartID);
-        console.log(fileCart);
+        const newCart = await cart.addCart();
+        res.status(201).json(newCart);
+        console.log(newCart);
     }
     catch (err) {
         res.status(500).json({ "Error al conectar con el servidor": err.message });
@@ -24,7 +18,7 @@ cartRouter.post('/', async (req, res) => {
 
 cartRouter.get('/:cid', async (req, res) => {
     try {
-        const cartID = parseInt(req.params.cid, 10);
+        const cartID = req.params.cid;
         const cartByID = await cart.getCart(cartID);
         if (!cartByID) {
             res.status(404).json({ message: "Cart not found" });
@@ -38,8 +32,8 @@ cartRouter.get('/:cid', async (req, res) => {
 
 cartRouter.post('/:cid/product/:pid', async (req, res) => {
     try {
-        const cartID = parseInt(req.params.cid, 10);
-        const productID = parseInt(req.params.pid, 10);
+        const cartID = req.params.cid;
+        const productID = req.params.pid;
         const cartByID = await cart.getCart(cartID);
         if (!cartByID) {
             res.status(404).json({ message: "Cart not found" });
@@ -48,25 +42,18 @@ cartRouter.post('/:cid/product/:pid', async (req, res) => {
             if (!productByID) {
                 res.status(404).json({ message: "Product not found" });
             } else {
-                const validationProduct = cartByID.products.find(p => p.id === productByID.id);
+                const validationProduct = cartByID.products.find(p => p._id === productByID._id);
                 if (validationProduct) {
-                    validationProduct.quantity = validationProduct.quantity + 1;
+                    const updateQuantity = validationProduct.quantity += 1;
+                    await cart.updateCart(cartID, updateQuantity);
                 } else {
                     const productInCart = {
-                        id: productByID.id,
                         quantity: 1
                     };
-                    cartByID.products.push(productInCart);
+                    await cart.updateCart(cartID, productInCart);
                 };
-                const allCarts = await cart.readFile();
-                const updatedCarts = allCarts.map((cart) => {
-                    if (cart.id === cartID) {
-                        return cartByID;
-                    }
-                    return cart;
-                });
-                await cart.writeFile(updatedCarts);
-                res.status(201).json(cartByID);
+                const updateCart = await cart.getCart(cartID);
+                res.status(201).json(updateCart);
             }
         }
     }
