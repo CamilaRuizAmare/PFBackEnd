@@ -31,8 +31,22 @@
                 <input type="text" id="id">
                 <button type="button" id="deleteProductButton">Borrar</button>
             </form>
+            
+            <h2>Chat!!</h2>
+            <div id="chat">
+            </div>
+            <div>
+            <form id="chatForm" class="flex">
+                <label for="user">Correo</label>
+                <input type="text" id="user">
+                <label for="message">Mensaje</label>
+                <input type="text" id="message" name="message">
+                <button type="submit" id="chat-button" >Enviar</button>
+            </form>
+            </div>
         </div>
     </div>
+
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>

@@ -1,0 +1,12 @@
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+
+const collectionMessage = 'messages';
+const messageSchema = new Schema({
+    user: {type: String, required: true},
+    message: String,
+});
+
+
+const messageModel = mongoose.model(collectionMessage, messageSchema);
+export default messageModel;

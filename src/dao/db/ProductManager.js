@@ -10,7 +10,6 @@ class ProductManager {
     async addProduct(newProduct) {
         const products = await productModel.find();
         const id = products.length === 0 ? 1 : products[products.length - 1].id + 1;
-        const status = true;
         const product = {
             id,
             title: newProduct.title,
@@ -19,7 +18,7 @@ class ProductManager {
             description: newProduct.description,
             thumbnail: newProduct.thumbnail,
             stock: newProduct.stock,
-            status
+            status: newProduct.status
         };
         const productNew = new productModel(product);
         const productValidation = product.title != '' && product.description != '' && product.price != '' && product.code != '' && product.stock != ''

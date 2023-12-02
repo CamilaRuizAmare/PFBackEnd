@@ -35,31 +35,29 @@ cartRouter.post('/:cid/product/:pid', async (req, res) => {
         const cartID = req.params.cid;
         const productID = req.params.pid;
         const cartByID = await cart.getCart(cartID);
-        if (!cartByID) {
-            res.status(404).json({ message: "Cart not found" });
-        } else {
-            const productByID = await productManager.getProductById(productID);
-            if (!productByID) {
-                res.status(404).json({ message: "Product not found" });
-            } else {
-                const validationProduct = cartByID.products.find(p => p._id === productByID._id);
-                if (validationProduct) {
-                    const updateQuantity = validationProduct.quantity += 1;
-                    await cart.updateCart(cartID, updateQuantity);
-                } else {
-                    const productInCart = {
-                        quantity: 1
-                    };
-                    await cart.updateCart(cartID, productInCart);
-                };
-                const updateCart = await cart.getCart(cartID);
-                res.status(201).json(updateCart);
-            }
+        const productByID = await productManager.getProductById(productID);
+        if (!cartByID || !productByID) {
+            res.status(404).json({ message: "Cart or product not found" });
         }
+        const validationProduct = cartByID.products.findIndex((p) => String(p._id) === productID);
+        //const validationProduct = cartByID.products.findIndex(p => p._id === productID);
+        console.log(validationProduct);
+        if (validationProduct === -1) {
+            const newProduct = {
+                _id: productID,
+                quantity: 1
+            };
+            cartByID.products.push(newProduct);
+            const updateCart = await cart.updateCart(cartID,cartByID);
+            return res.status(201).json(updateCart);
+        } 
+            cartByID.products[validationProduct].quantity += 1;
+            const updateCart = await cart.updateCart(cartID,cartByID);
+            return res.status(201).json(updateCart);
     }
     catch (err) {
-        res.status(500).json({ "Error al conectar con el servidor": err.message });
-    }
+    res.status(500).json({ "Error al conectar con el servidor": err.message });
+}
 });
 
 export { cartRouter };

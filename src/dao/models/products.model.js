@@ -12,7 +12,8 @@ const productSchema = new mongoose.Schema({
     description: String,
     thumbnail: String,
     stock: Number,
-    status: Boolean
+    status: {type: Boolean, default: true},
+    esVisible: {type: Boolean, default: false}
 });
 
 const productModel = mongoose.model(collectionProducts, productSchema);

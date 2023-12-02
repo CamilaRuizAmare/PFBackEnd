@@ -26,12 +26,16 @@ class Cart {
     };
 
     async updateCart(idCart, newCart) {
-        const updateCart = await cartModel.findByIdAndUpdate(idCart, newCart);
-        if (!updateCart) {
+        const updateCart = await cartModel.findByIdAndUpdate(idCart, newCart, {new: true});
+        
+        if(!updateCart) {
             return;
-        } else {
+        }
+        else {
             return updateCart;
-        };
+        }
+
+
     };
 
     async deleteCart(id) {

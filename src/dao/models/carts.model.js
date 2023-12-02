@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 
 const collectionCarts = 'carts';
 const cartsSchema = new mongoose.Schema({
-    id: Number,
     products: [{
         idProduct: {
             type: Schema.Types.ObjectId, ref: 'products',
@@ -12,6 +11,7 @@ const cartsSchema = new mongoose.Schema({
         quantity: Number
     }]
 });
+
 
 const cartModel = mongoose.model(collectionCarts, cartsSchema);
 export default cartModel;

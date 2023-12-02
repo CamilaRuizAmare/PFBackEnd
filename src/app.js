@@ -8,6 +8,7 @@ import realTimeRouter from './routes/realtimeproducts.router.js';
 import { productsRouter } from './routes/products.router.js';
 import { cartRouter } from './routes/cart.router.js';
 import productManager from './dao/db/ProductManager.js';
+import messageModel from './dao/models/message.model.js';
 
 const app = express();
 const port = 8080;
@@ -55,6 +56,19 @@ io.on('connection', async (socket) => {
         console.log('Error: ', err)
     }
     }); 
+    const messages = await messageModel.find();
+    socket.emit('messages', messages);
+    socket.on('newMessage', async (data) => {
+        try {
+        const newMessage = new messageModel(data);
+        await newMessage.save();
+        const messages = await messageModel.find();
+        socket.emit('messages', messages);
+    }
+    catch (err) {
+        console.log('Error: ', err)
+    }
+    })
 });
 
 export default io;
