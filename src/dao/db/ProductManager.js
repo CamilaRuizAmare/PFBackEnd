@@ -9,9 +9,8 @@ class ProductManager {
 
     async addProduct(newProduct) {
         const products = await productModel.find();
-        const id = products.length === 0 ? 1 : products[products.length - 1].id + 1;
+        //const id = products.length === 0 ? 1 : products[products.length - 1].id + 1;
         const product = {
-            id,
             title: newProduct.title,
             price: newProduct.price,
             code: newProduct.code,

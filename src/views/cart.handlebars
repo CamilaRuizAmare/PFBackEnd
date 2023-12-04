@@ -1,0 +1,15 @@
+<div class="flex">
+    <h1>Tu carrito de compras:</h1>
+
+    {{#each productsInCart}}
+    <div class="product">
+        <ul>
+            <h2>{{this._id}}</h2>
+            <li>Precio: $ {{this.price}}</li>
+            <li>Descripcion: {{this.description}}</li>
+            <li>Stock: {{this.stock}}</li>
+        </ul> 
+    </div>    
+    {{/each}}
+    
+</div>

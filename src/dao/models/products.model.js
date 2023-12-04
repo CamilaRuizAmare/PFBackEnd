@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2';
+import { v4 as uuidv4 } from 'uuid';
 
-const collectionProducts = 'products';
+
+const collectionProducts = 'Products';
 const productSchema = new mongoose.Schema({
-    id: Number,
+    _id: {type: String, default: uuidv4()},
     title: String,
     price: Number,
     code: {
@@ -11,10 +14,13 @@ const productSchema = new mongoose.Schema({
     },
     description: String,
     thumbnail: String,
+    category: String,
     stock: Number,
     status: {type: Boolean, default: true},
     esVisible: {type: Boolean, default: false}
 });
+
+productSchema.plugin(mongoosePaginate);
 
 const productModel = mongoose.model(collectionProducts, productSchema);
 export default productModel;

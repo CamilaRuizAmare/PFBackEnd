@@ -18,6 +18,17 @@ const httpServer = app.listen(port, () => {
 
 const io = new Server(httpServer);
 
+const hbs = handlebars.create({
+
+    runtimeOptions: {
+ 
+     allowProtoPropertiesByDefault: true,
+ 
+     allowProtoMethodsByDefault: true,
+ 
+   },
+ 
+ });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -7,7 +7,8 @@ const realTimeRouter = express.Router();
 
 realTimeRouter.get('/', async (req, res) => {
     const products = await productManager.getProducts();
-    res.render('index', { products });
+    res.render('realTimeProducts', products)
+    });
     /* io.on('connection', (socket) => {
         console.log('Cliente conectado');
         socket.on('prueba', (data) => {
@@ -16,6 +17,5 @@ realTimeRouter.get('/', async (req, res) => {
         socket.emit('products', products);
         
     }); */
-  });
 
 export default realTimeRouter;
