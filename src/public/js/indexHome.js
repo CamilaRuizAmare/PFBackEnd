@@ -1,21 +1,5 @@
-
-fetch('/api/products')
-    .then((response) => {
-        return response.json();
-    })
-    .then((data) => {
-        console.log(data);
-        console.log('asjdhasjdas!!!')
-        renderProducts(data.docs);
-    })
-    .catch((error) => {
-        console.error(error);
-    });
-
-
-
 const renderProducts = (products) => {
-    const divProduct = document.getElementById('productPrueba');
+    const divProduct = document.getElementById('productDiv');
     divProduct.innerHTML = ``
     products.forEach((product) => {
         divProduct.innerHTML += `
@@ -32,3 +16,56 @@ const renderProducts = (products) => {
             `
     })
 };
+
+const orderByCategory = () => {
+    const orderCategory = document.getElementById('category');
+    //const buttonDesc = document.getElementById('orderPriceMax');
+    //const buttonAsc = document.getElementById('orderPriceMin');
+
+    orderCategory.addEventListener('change', async () => {
+        try {
+            const categoryValue = orderCategory.value;
+            if (categoryValue === "") {
+                history.pushState({ category: categoryValue }, {}, `/api/products/?category=${categoryValue}`);
+                getProducts();
+                return;
+            }
+            const response = await fetch(`/api/products/?category=${categoryValue}`);
+            history.pushState({}, {}, `/api/products/?category=${categoryValue}`);
+            const data = await response.json();
+            console.log(data, response.url);
+            console.log(categoryValue);
+            renderProducts(data.docs);
+        } catch (error) {
+            console.log(error);
+        }
+    });
+};
+
+const getProducts = () => {
+    fetch('/api/products')
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            console.log('asjdhasjdas!!!')
+            renderProducts(data.docs);
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
+
+getProducts();
+orderByCategory();
+
+
+
+
+
+
+
+
+

@@ -3,6 +3,11 @@ import cart from '../dao/db/Cart.js';
 import productManager from '../dao/db/ProductManager.js';
 const cartRouter = express.Router();
 
+
+cartRouter.get('/', async (req, res) => {
+    res.render('cart');
+});
+
 //Crea un nuevo carrito
 
 cartRouter.post('/', async (req, res) => {
@@ -29,7 +34,7 @@ cartRouter.get('/:cid', async (req, res) => {
         const productsInCart = cartByID.products
         console.log(cartByID);
         console.log(productsInCart);
-        res.status(200).render('cart', {productsInCart});
+        res.status(200).json(productsInCart);
     }
     catch (err) {
         res.status(500).json({ "Error al conectar con el servidor": err.message });

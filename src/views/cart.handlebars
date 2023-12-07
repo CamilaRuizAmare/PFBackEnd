@@ -1,15 +1,16 @@
-<div class="flex">
+<div id="cartDiv" class="flex">
     <h1>Tu carrito de compras:</h1>
 
-    {{#each productsInCart}}
-    <div class="product">
-        <ul>
-            <h2>{{this._id}}</h2>
-            <li>Precio: $ {{this.price}}</li>
-            <li>Descripcion: {{this.description}}</li>
-            <li>Stock: {{this.stock}}</li>
-        </ul> 
-    </div>    
-    {{/each}}
-    
+    <form id="formCart" >
+        <label for="searchCart">Buscar Carrito</label>
+        <input id="searchCart" type="text">
+        <button id="buttonSearch">Buscar</button>
+    </form>
+
+    <div id="productsCartDiv">
+
+    </div>
+
 </div>
+
+<script type="text/javascript" src="/js/indexCart.js"></script>

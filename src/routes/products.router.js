@@ -8,12 +8,12 @@ productsRouter.get('/', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const query = req.query;
-        const sort = parseInt(req.query.sort) || 0;
-        console.log(sort, query)
-        const products = await productModel.paginate(query, {page: page, limit: limit, sort: ({price: -1})});
-        console.log(products);
-        //const url = `api/products/&${{query}}=${query.query}&limit=${limit}&page=${page}&sort=${sort}`;
+        const query = req.query || '';
+        const sort = parseInt(req.query.sort) || '';
+        console.log('consulta', query)
+        /* const products = await productModel.paginate({query, {limit: limit, page: page, lean: true, sort: ({price: sort})}); */
+        const products = await productModel.paginate(query, {limit: limit, page: page, lean: true, sort: ({price: 1})});
+        console.log(products, products.limit);
         return res.status(200).json(products);
         
     }
