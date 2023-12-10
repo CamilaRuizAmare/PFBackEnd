@@ -1,4 +1,4 @@
-const renderProducts = (products) => {
+/* const renderProducts = (products) => {
     const divProduct = document.getElementById('productDiv');
     divProduct.innerHTML = ``
     products.forEach((product) => {
@@ -48,9 +48,9 @@ const getProducts = () => {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
+            console.log(data.docs[0]);
             console.log('asjdhasjdas!!!')
-            renderProducts(data.docs);
+            return renderProducts(data.docs);
 
         })
         .catch((error) => {
@@ -58,8 +58,8 @@ const getProducts = () => {
         });
 };
 
-getProducts();
-orderByCategory();
+//getProducts();
+orderByCategory(); */
 
 
 

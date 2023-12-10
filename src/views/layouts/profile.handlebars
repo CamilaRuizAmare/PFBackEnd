@@ -1,0 +1,35 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/styles.css">
+<title>Tu perfil de usuario</title>
+
+{{#if profileUser.first_name}}
+<div class="flex">
+    <h1>Información de usuario</h1>
+    <h2>Nombre/s: </h2> <h3>{{profileUser.first_name}}</h3>
+    <h2>Apellido/s: </h2> <h3>{{profileUser.last_name}}</h3>
+    <h2>Email: </h2> <h3>{{profileUser.email}}</h3>
+    <h2>Edad: </h2> <h3>{{profileUser.age}}</h3>
+    <h2>Perfil de usuario: </h2> <h3>{{profileUser.profile}}</h3>
+    {{#if adminUser}}
+    <div>
+        <a href="/realTimeProducts">
+        <button>
+            Editar Productos
+        </button></a>
+    </div>
+    {{/if}}
+</div>
+{{else}}
+<div>
+    <h2>
+        Tu tiempo de sesión expiró, por favor volvé a loguearte.
+    </h2>
+    <a href="./">
+    <button>
+        Volver al Inicio
+    </button>
+    
+    </a>
+</div>
+{{/if}}

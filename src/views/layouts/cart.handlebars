@@ -1,0 +1,31 @@
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>{{title}}</title>
+
+<div id="cartDiv" class="flex">
+
+    <form id="formCart" >
+        <label for="searchCart">Buscar Carrito</label>
+        <input id="searchCart" type="text">
+        <button id="buttonSearch">Buscar</button>
+    </form>
+
+    <h1>Tu carrito de compras:</h1>
+    <div id="productsCartDiv">
+        {{!-- {{#each productsInCart}}
+        <div id={{this._id._id}} class="product flex"> 
+                <h2>{{this._id.title}}</h2>
+                <ul>
+                    <li>Precio Unitario: $ {{this._id.price}}</li>
+                    <li>Descripción: {{this._id.description}}</li>
+                    <li>Cantidad: {{this.quantity}}</li>
+                    
+                </ul>
+            </div>
+            {{/each}} --}}
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/js/indexCart.js"></script>

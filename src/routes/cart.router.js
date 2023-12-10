@@ -5,7 +5,9 @@ const cartRouter = express.Router();
 
 
 cartRouter.get('/', async (req, res) => {
-    res.render('cart');
+    res.render('index', {
+        layout: 'cart'
+    });
 });
 
 //Crea un nuevo carrito

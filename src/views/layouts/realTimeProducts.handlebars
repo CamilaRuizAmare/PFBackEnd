@@ -1,5 +1,16 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/styles.css">
+<title>Base Admin de productos</title>
+
+{{#if profileUser.first_name}}
 <div class="flex">
     <h1>Lista de productos Real Time:</h1>
+    <a href="/products">
+    <button>
+        Volver a Productos
+    </button>
+    </a>
     <div class="container">
         <div id="products"></div>
         <div class="forms">
@@ -46,7 +57,19 @@
             </div>
         </div>
     </div>
-
+{{else}}
+<div>
+    <h2>
+        Tu tiempo de sesión expiró, por favor volvé a loguearte.
+    </h2>
+    <a href="./">
+    <button>
+        Volver al Inicio
+    </button>
+    
+    </a>
+</div>
+{{/if}}
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>

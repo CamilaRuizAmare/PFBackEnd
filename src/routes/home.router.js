@@ -5,8 +5,10 @@ const products = await productManager.getProducts();
 const homeRouter = express.Router();
 
 homeRouter.get('/', (req, res) => {
-    res.render('home');
-    console.log(products);
+    res.render('index', {
+        layout: 'home',
+    });
+    //console.log(products);
 });
 
 

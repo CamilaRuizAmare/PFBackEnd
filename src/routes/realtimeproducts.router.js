@@ -7,7 +7,10 @@ const realTimeRouter = express.Router();
 
 realTimeRouter.get('/', async (req, res) => {
     const products = await productManager.getProducts();
-    res.render('realTimeProducts', products)
+    res.render('index', {
+        layout: 'realTimeProducts',
+        products,
+        profileUser: req.session.user})
     });
     /* io.on('connection', (socket) => {
         console.log('Cliente conectado');
