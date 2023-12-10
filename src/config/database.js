@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
+import 'dotenv/config.js';
 
-const URL = 'mongodb+srv://ruizamarecamila:OpRcmgjc7egyNMgo@ecommerce.6lisixq.mongodb.net/?retryWrites=true&w=majority';
+const URL = process.env.mongoUrl;
+
 const db = mongoose.connection;
 mongoose.connect(URL, {});
 

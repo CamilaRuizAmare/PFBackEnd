@@ -6,6 +6,7 @@ import {Server} from "socket.io";
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import 'dotenv/config.js';
 import homeRouter from './routes/home.router.js'
 import realTimeRouter from './routes/realtimeproducts.router.js';
 import { productsRouter } from './routes/products.router.js';
@@ -32,10 +33,10 @@ const hbs = handlebars.create({
 
  app.use(session({
     store: MongoStore.create({
-        mongoUrl: 'mongodb+srv://ruizamarecamila:OpRcmgjc7egyNMgo@ecommerce.6lisixq.mongodb.net/?retryWrites=true&w=majority',
+        mongoUrl: process.env.mongoUrl,
         ttl: 100
     }),
-    secret: '112bb9c192855451197ea8b3dbec52b01ed03559c1fcffb78420eb52e92076f5aac339eaba94bc14e4c7a20e1e42fc0cebc88aa074dafbf3e0bdd7ca095f395e',
+    secret: process.env.sessionSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {maxAge: 100000}
