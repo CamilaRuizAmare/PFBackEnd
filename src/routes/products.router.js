@@ -6,14 +6,6 @@ const productsRouter = express.Router();
 
 productsRouter.get('/', async (req, res) => {
     try {
-        /* const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-        const query = req.query || '';
-        const sort = parseInt(req.query.sort) || '';
-        console.log('consulta', query)
-        const aproducts = await productModel.paginate({query, {limit: limit, page: page, lean: true, sort: ({price: sort})});
-        const products = await productModel.paginate(query, { limit: limit, page: page, lean: true, sort: ({ price: 1 }) });
-        console.log(products.docs); */
         const query = req.query;
         const filter = {};
         for (let q in query) {
@@ -30,7 +22,6 @@ productsRouter.get('/', async (req, res) => {
         const products = await productModel.paginate(filter, option);
         console.log(query, products);
         console.log(products.totalDocs);
-        console.log(req.session.user.profile);
         return res.status(200).render("index", {
             layout: 'products',
             title: 'All Products',

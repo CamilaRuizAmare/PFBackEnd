@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import 'dotenv/config.js';
+import passport from 'passport';
+import initPassport from './config/passport.config.js';
 import homeRouter from './routes/home.router.js'
 import realTimeRouter from './routes/realtimeproducts.router.js';
 import { productsRouter } from './routes/products.router.js';
@@ -41,7 +43,9 @@ const hbs = handlebars.create({
     saveUninitialized: true,
     cookie: {maxAge: 100000}
 }));
-
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));

@@ -4,7 +4,7 @@
     <title>{{title}}</title>
 
 <div class="flex">
-    {{#if dataUser.first_name}}
+    {{!-- {{#if dataUser.first_name}} --}}
     <div>
         Bienvenido/a, {{dataUser.first_name}} {{dataUser.last_name}}!
     </div>
@@ -41,7 +41,7 @@
             </div>
         {{/each}}
     </div>
-    {{else}}
+{{!--     {{else}}
 <div>
     <h2>
         Tu tiempo de sesión expiró, por favor volvé a loguearte.
@@ -53,7 +53,7 @@
     
     </a>
 </div>
-{{/if}}
+{{/if}} --}}
 </div> 
 
 <script type="text/javascript" src="/js/indexHome.js"></script>
