@@ -6,17 +6,24 @@
 {{#if profileUser.first_name}}
 <div class="flex">
     <h1>Información de usuario</h1>
-    <h2>Nombre/s: </h2> <h3>{{profileUser.first_name}}</h3>
-    <h2>Apellido/s: </h2> <h3>{{profileUser.last_name}}</h3>
-    <h2>Email: </h2> <h3>{{profileUser.email}}</h3>
-    <h2>Edad: </h2> <h3>{{profileUser.age}}</h3>
-    <h2>Perfil de usuario: </h2> <h3>{{profileUser.profile}}</h3>
+    <div class="cardUser">
+        <h3>Nombre/s: </h3>
+        <p>{{profileUser.first_name}}</p>
+        <h3>Apellido/s: </h3>
+        <p>{{profileUser.last_name}}</p>
+        <h3>Email: </h3>
+        <p>{{profileUser.email}}</p>
+        <h3>Edad: </h3>
+        <p>{{profileUser.age}}</p>
+        <h3>Perfil de usuario: </h3>
+        <p>{{profileUser.profile}}</p>
+    </div>
     {{#if adminUser}}
     <div>
         <a href="/realTimeProducts">
-        <button>
-            Editar Productos
-        </button></a>
+            <button>
+                Editar Productos
+            </button></a>
     </div>
     {{/if}}
 </div>
@@ -26,10 +33,10 @@
         Tu tiempo de sesión expiró, por favor volvé a loguearte.
     </h2>
     <a href="./">
-    <button>
-        Volver al Inicio
-    </button>
-    
+        <button>
+            Volver al Inicio
+        </button>
+
     </a>
 </div>
 {{/if}}

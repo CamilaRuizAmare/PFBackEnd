@@ -12,13 +12,5 @@ realTimeRouter.get('/', async (req, res) => {
         products,
         profileUser: req.session.user})
     });
-    /* io.on('connection', (socket) => {
-        console.log('Cliente conectado');
-        socket.on('prueba', (data) => {
-            console.log(data);
-        });
-        socket.emit('products', products);
-        
-    }); */
 
 export default realTimeRouter;

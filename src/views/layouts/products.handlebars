@@ -4,28 +4,20 @@
     <title>{{title}}</title>
 
 <div class="flex">
-    {{!-- {{#if dataUser.first_name}} --}}
+    {{#if dataUser.first_name}}
     <div>
         Bienvenido/a, {{dataUser.first_name}} {{dataUser.last_name}}!
     </div>
-    <a href="./profile">
+    <a href="/profile">
     <button>Mi perfil</button>
     </a>
-    <a href="./api/sessions/logout">
+    <a href="/api/sessions/logout">
     <button>Cerrar Sesión</button>
     </a>
     <h1>Lista de productos:</h1>
     <div>
         <p>Cantidad de productos: {{products.totalDocs}}</p>
         <p>Productos máximos por página: {{products.limit}}</p>
-        {{!-- <label for="category">Buscar por categoría</label>
-        <select name="category" id="category">
-            <option value="">Todas las categorías</option>
-            <option value="Varios">Varios</option>
-            <option value="HogaryDeco">Hogar&Deco</option>
-        </select>
-        <button id="orderPriceMax">Mayor precio</button>
-        <button id="orderPriceMin">Menor precio</button> --}}
     </div>
     <div id="products">
         {{#each products.docs}}
@@ -41,7 +33,7 @@
             </div>
         {{/each}}
     </div>
-{{!--     {{else}}
+{{else}}
 <div>
     <h2>
         Tu tiempo de sesión expiró, por favor volvé a loguearte.
@@ -53,27 +45,6 @@
     
     </a>
 </div>
-{{/if}} --}}
+{{/if}}
 </div> 
 
-<script type="text/javascript" src="/js/indexHome.js"></script>
-
-{{!-- <div class="flex">
-    <h1>Lista de productos:</h1>
-    <div>
-        
-        <label for="category">Buscar por categoría</label>
-        <select name="category" id="category">
-            <option value="">Todas las categorías</option>
-            <option value="Varios">Varios</option>
-            <option value="HogaryDeco">Hogar&Deco</option>
-        </select>
-        <button id="orderPriceMax">Mayor precio</button>
-        <button id="orderPriceMin">Menor precio</button>
-    </div>
-    <div id="productDiv">
-
-    </div>
-</div>
-
-<script type="text/javascript" src="/js/indexHome.js"></script> --}}

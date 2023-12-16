@@ -36,12 +36,12 @@ const hbs = handlebars.create({
  app.use(session({
     store: MongoStore.create({
         mongoUrl: process.env.mongoUrl,
-        ttl: 100
+        ttl: 15*60
     }),
     secret: process.env.sessionSecret,
     resave: false,
     saveUninitialized: true,
-    cookie: {maxAge: 100000}
+    cookie: {maxAge: 900000}
 }));
 initPassport();
 app.use(passport.initialize());

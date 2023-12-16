@@ -32,7 +32,6 @@ const searchCart = () => {
             })
             .then((data) => {
                 console.log(data);
-                // console.log('asjdhasjdas!!!')
                 renderProducts(data); 
             })
             .catch((error) => {

@@ -8,7 +8,6 @@ homeRouter.get('/', (req, res) => {
     res.render('index', {
         layout: 'home',
     });
-    //console.log(products);
 });
 
 
