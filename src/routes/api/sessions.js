@@ -11,7 +11,7 @@ sessionRouter.post('/register', passport.authenticate('register', {failureRedire
         last_name: req.user.last_name,
         age: req.user.age,
         email: req.user.email,
-        profile: req.user.profile
+        role: req.user.role
     }
     res.status(201).redirect('/products');
 }); 
@@ -24,7 +24,7 @@ sessionRouter.post('/login', passport.authenticate('login', {failureRedirect: '/
         last_name: req.user.last_name,
         age: req.user.age,
         email: req.user.email,
-        profile: req.user.profile
+        role: req.user.role
     }
     res.status(201).redirect('/products');
 });

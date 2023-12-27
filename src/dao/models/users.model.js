@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema({
     email: {type: String, unique: true},
     age: Number,
     password: String,
-    profile: {type: String, default: 'Usuario'}
+    role: {type: String, default: 'user'},
+    cart: [{
+        _id: {type: String, unique: true, ref: 'carts'},
+        status: {type: String, default: 'open'}
+    }]
 });
 
 const userModel = mongoose.model(collectionUsers, userSchema);

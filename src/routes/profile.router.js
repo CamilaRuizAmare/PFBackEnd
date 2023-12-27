@@ -4,7 +4,7 @@ const profileRouter = express.Router();
 
 profileRouter.get('/', (req, res) => {
     let profileUser = req.session.user
-    let adminUser = profileUser.profile === 'Admin' ? true : false
+    let adminUser = profileUser.role === 'Admin' ? true : false
     res.render('index', {
         layout: 'profile',
         profileUser,
