@@ -2,12 +2,10 @@ import express from 'express';
 import { db } from './config/database.js';
 import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
-import {Server} from "socket.io";
-import cookieParser from 'cookie-parser';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
-import 'dotenv/config.js';
+import { Server } from "socket.io";
 import passport from 'passport';
+import cookieParser from 'cookie-parser';
+import 'dotenv/config.js';
 import initPassport from './config/passport.config.js';
 import homeRouter from './routes/home.router.js'
 import realTimeRouter from './routes/realtimeproducts.router.js';
@@ -28,28 +26,17 @@ const io = new Server(httpServer);
 
 const hbs = handlebars.create({
     runtimeOptions: {
-    allowProtoPropertiesByDefault: true,
-    allowProtoMethodsByDefault: true,
-   },
- });
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    },
+});
 
- app.use(session({
-    store: MongoStore.create({
-        mongoUrl: process.env.mongoUrl,
-        ttl: 15*60
-    }),
-    secret: process.env.sessionSecret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {maxAge: 900000}
-}));
+app.use(cookieParser());
 initPassport();
 app.use(passport.initialize());
-app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(cookieParser());
 app.use('/products', productsRouter);
 app.use('/', homeRouter);
 app.use('/profile', profileRouter);
@@ -77,28 +64,28 @@ io.on('connection', async (socket) => {
     });
     socket.on('deleteProduct', async (data) => {
         try {
-        const idDeleted = await productManager.deleteProduct(data);
-        const updateProducts = await productManager.getProducts();
-        io.emit('products', updateProducts);
-        console.log(idDeleted);
-        io.emit('idDeleted', idDeleted);
-    }
-    catch(err) {
-        console.log('Error: ', err)
-    }
-    }); 
+            const idDeleted = await productManager.deleteProduct(data);
+            const updateProducts = await productManager.getProducts();
+            io.emit('products', updateProducts);
+            console.log(idDeleted);
+            io.emit('idDeleted', idDeleted);
+        }
+        catch (err) {
+            console.log('Error: ', err)
+        }
+    });
     const messages = await messageModel.find();
     socket.emit('messages', messages);
     socket.on('newMessage', async (data) => {
         try {
-        const newMessage = new messageModel(data);
-        await newMessage.save();
-        const messages = await messageModel.find();
-        socket.emit('messages', messages);
-    }
-    catch (err) {
-        console.log('Error: ', err)
-    }
+            const newMessage = new messageModel(data);
+            await newMessage.save();
+            const messages = await messageModel.find();
+            socket.emit('messages', messages);
+        }
+        catch (err) {
+            console.log('Error: ', err)
+        }
     })
 });
 

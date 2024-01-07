@@ -1,51 +1,30 @@
 import passport from 'passport';
 import GitHubStrategy from 'passport-github2'
-import local from "passport-local";
-import { createPassHash, validatePass } from "../utils.js";
+import jwt from "passport-jwt";
 import userModel from "../dao/models/users.model.js";
 import 'dotenv/config.js'
 
-const strategyLocal = local.Strategy;
+const strategyJWT = jwt.Strategy;
+const extractJWT = jwt.ExtractJwt;
+const cookieExtractor = (req) => {
+  let token = null;
+  if(req && req.cookies) {
+    token = req.cookies['userToken']
+  };
+  return token
+};
 
 const initPassport = () => {
-
-  passport.use('register', new strategyLocal({ passReqToCallback: true, usernameField: 'email' },
-      async (req, username, password, done) => {
-          const { first_name, last_name, email, age } = req.body;
-        try {
-          let user = await userModel.findOne({ email: username });
-          if (user) {
-            console.log("El usuario ya está registrado");
-            return done(null, false);
-          };
-          const userNew = new userModel({ first_name, last_name, email, age, password: createPassHash(password) });
-          await userNew.save();
-          return done(null, userNew);
-        } catch (error) {
-          return done('Error al crear el usuario', error);
-        }
-      }
-    )
-  );
- 
-  passport.use("login", new strategyLocal({ usernameField: 'email'},
-      async (username, password, done) => {
-        try {
-          const userToLogin = await userModel.findOne({ email: username });
-          if (!userToLogin) {
-            console.log('Usuario y/o contraseña invalidos');
-            return done(null, false);
-          };
-          if (!validatePass(userToLogin, password)) {
-              return done(null, false);
-          };
-          return done(null, userToLogin);
-        } catch (error) {
-          return done('Error al iniciar sesión', error);
-        }
-      }
-    )
-  );
+  passport.use('jwt', new strategyJWT({
+    jwtFromRequest: extractJWT.fromExtractors([cookieExtractor]),
+    secretOrKey: process.env.privateKey
+  }, async (jwt_payload, done) => {
+    try {
+      return done(null, jwt_payload)
+    } catch (error) {
+        return done(error)
+    }
+  }));
 
   passport.use('github', new GitHubStrategy({
     clientID: process.env.gitClientId,

@@ -1,6 +1,8 @@
 import { MongooseError } from "mongoose";
 import userModel from "../models/users.model.js";
 import { createPassHash, validatePass } from "../../utils.js";
+import cart from "../db/Cart.js";
+import { generateToken } from '../../utils.js'
 
 export const newUser = async (req, res) => {
     try {
@@ -8,15 +10,15 @@ export const newUser = async (req, res) => {
         if (!first_name || !last_name || !email || !password) {
             res.status(401).send({ error: 'Incomplete values' })
         }
-        const userNew = new userModel({ first_name, last_name, email, age, password: createPassHash(password) });
+        const userNew = new userModel({ first_name, last_name, email, age, password: createPassHash(password), cart: await cart.addCart() });
         await userNew.save();
-        req.session.user = {
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            age: age
-        }
-        res.status(201).redirect('/products');
+        let token = generateToken(newUser);
+        res
+            .status(201)
+            .cookie('userToken', token, {
+                maxAge: 900000, httpOnly: true
+            })
+            .redirect('/products');
     } catch (error) {
         if (MongooseError) {
             res.status(409).send({ error: 'El email ingresado ya está registrado' })
@@ -29,11 +31,17 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-            req.session.user = {
+            req.user = {
                 first_name: 'adminCoder',
-                profile: 'Admin'
+                role: 'Admin'
             }
-            return res.redirect("/products");
+            let token = generateToken(email)
+            return res
+                .status(201)
+                .cookie('userToken', token, {
+                    maxAge: 900000, httpOnly: true
+                })
+                .redirect('/products');
         }
         const userToLogin = await userModel.findOne({ email });
         if (!userToLogin) {
@@ -41,15 +49,14 @@ export const loginUser = async (req, res) => {
         }
         if (!validatePass(userToLogin, password)) {
             return res.status(401).send('Usuario y/o contraseña invalidos');
-        } 
-        req.session.user = {
-            first_name: userToLogin.first_name,
-            last_name: userToLogin.last_name,
-            email: userToLogin.email,
-            age: userToLogin.age,
-            profile: userToLogin.profile
         }
-        res.redirect("/products");
+        let token = generateToken(userToLogin)
+        res
+            .status(201)
+            .cookie('userToken', token, {
+                maxAge: 900000, httpOnly: true
+            })
+            .redirect('/products');
     } catch (error) {
         console.log('Error al iniciar sesión', error);
     }
@@ -57,19 +64,16 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
     try {
-        if (req.session.user) {
-            delete req.session.user;
-            req.session.destroy((err) => {
-                if (err) {
-                    console.log("Error al cerrar la sesión", err);
-                    res.status(500).send("Error al cerrar la sesión");
-                } else {
-                    res.redirect("/");
-                }
-            });
-        }
-    } catch (error) {
-        console.log("Error al cerrar la sesión", error);
-        res.status(500).send("Error al cerrar la sesión");
+        if (req.cookies['userToken']) {
+            res
+            .cookie('userToken', '', {
+                maxAge: 1, httpOnly: true
+            })
+            .redirect("/");
+        };
     }
+     catch (error) {
+    console.log("Error al cerrar la sesión", error);
+    res.status(500).send("Error al cerrar la sesión");
+}
 };

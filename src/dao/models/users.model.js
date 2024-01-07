@@ -8,10 +8,19 @@ const userSchema = new mongoose.Schema({
     age: Number,
     password: String,
     role: {type: String, default: 'user'},
-    cart: [{
+    cart: {
         _id: {type: String, unique: true, ref: 'carts'},
         status: {type: String, default: 'open'}
-    }]
+    }
+});
+
+const autoPopulateLead = function (next) {
+    this.populate('cart._id');
+    next();
+};
+
+userSchema.pre('save', autoPopulateLead).pre('find', function (next) {
+    this.populate('cart._id'), next();
 });
 
 const userModel = mongoose.model(collectionUsers, userSchema);

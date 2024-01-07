@@ -5,6 +5,9 @@
 
 {{#if profileUser.first_name}}
 <div class="flex">
+    <a href="/products">
+    <button>Volver al Home</button>
+    </a>
     <h1>Información de usuario</h1>
     <div class="cardUser">
         <h3>Nombre/s: </h3>
@@ -16,7 +19,7 @@
         <h3>Edad: </h3>
         <p>{{profileUser.age}}</p>
         <h3>Perfil de usuario: </h3>
-        <p>{{profileUser.profile}}</p>
+        <p>{{profileUser.role}}</p>
     </div>
     {{#if adminUser}}
     <div>
