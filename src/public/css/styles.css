@@ -50,6 +50,10 @@ li {
     border-radius: 35px;
 }
 
+.links {
+    text-align: end;
+}
+
 label {
     margin: 5px 0;
     padding-left: 5px;
@@ -68,6 +72,12 @@ button {
     border: none;
     border-radius: 8px;
     background-color: darkgrey;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    margin: 0 5px;
 }
 
 #products {

@@ -1,6 +1,7 @@
 import productModel from "../models/products.model.js";
 
 class ProductManager {
+    constructor() { }
 
     async getProducts() {
         const products = await productModel.find();
@@ -8,7 +9,7 @@ class ProductManager {
     };
 
     async addProduct(newProduct) {
-        const products = await productModel.find();
+        /* const products = await productModel.find();
         const product = {
             title: newProduct.title,
             price: newProduct.price,
@@ -26,7 +27,10 @@ class ProductManager {
         }
         else {
             return `El producto con código ${product.code} ya fue ingresado`
-        };
+        }; */
+        const productNew = new productModel(newProduct);
+        const productSave = await productNew.save();
+        return productSave;
     };
 
     async getProductById(id) {
@@ -51,7 +55,7 @@ class ProductManager {
     async deleteProduct(id) {
         const deleteProduct = await productModel.findByIdAndDelete(id);
         if (!deleteProduct) {
-            return; 
+            return;
         }
         else {
             return deleteProduct;

@@ -1,7 +1,5 @@
 import express from 'express';
-import productManager from '../dao/db/ProductManager.js';
 
-const products = await productManager.getProducts();
 const homeRouter = express.Router();
 
 homeRouter.get('/', (req, res) => {
@@ -10,7 +8,4 @@ homeRouter.get('/', (req, res) => {
     });
 });
 
-
-
-export {products};
 export default homeRouter;

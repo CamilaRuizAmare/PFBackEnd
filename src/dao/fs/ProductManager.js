@@ -9,17 +9,6 @@ class ProductManager {
         await fs.promises.writeFile(this.path, JSON.stringify(products), 'utf-8');
     };
 
-    async readFile() {
-        try {
-            const infoProduct = await fs.promises.readFile(this.path);
-            const products = JSON.parse(infoProduct);
-            return products;
-        }
-        catch (error) {
-            return [];
-        }
-    };
-
     async addProduct(newProduct) {
             const file = await this.readFile();
             const id = file.length === 0 ? 1 : file[file.length - 1].id + 1;

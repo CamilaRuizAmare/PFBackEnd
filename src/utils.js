@@ -4,12 +4,12 @@ import passport from 'passport';
 import {fileURLToPath} from 'url';
 import { dirname } from 'path';
 import bcrypt from "bcrypt";
-import 'dotenv/config.js'
+import config from './config/env.config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const privateKey = process.env.privateKey;
+const privateKey = config.privateKey;
 
 const storage = multer.diskStorage({
     destination: (req, res, cb) => {

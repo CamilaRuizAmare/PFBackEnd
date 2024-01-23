@@ -5,12 +5,14 @@
 
 {{#if profileUser.first_name}}
 <div class="flex">
-    <h1>Lista de productos Real Time:</h1>
-    <a href="/products">
-    <button>
-        Volver a Productos
-    </button>
+    <h1>Bienvenido/a, {{dataUser.first_name}}!</h1>
+    <a href="/profile">
+        <button>Mi perfil</button>
     </a>
+    <a href="/api/sessions/logout">
+        <button>Cerrar Sesión</button>
+    </a>
+    <h2>Lista de productos Real Time:</h2>
     <div class="container">
         <div id="products"></div>
         <div class="forms">
@@ -43,18 +45,6 @@
                 <button type="button" id="deleteProductButton">Borrar</button>
             </form>
             
-            <h2>Chat!!</h2>
-            <div id="chat">
-            </div>
-            <div>
-            <form id="chatForm" class="flex">
-                <label for="user">Correo</label>
-                <input type="text" id="user">
-                <label for="message">Mensaje</label>
-                <input type="text" id="message" name="message">
-                <button type="submit" id="chat-button" >Enviar</button>
-            </form>
-            </div>
         </div>
     </div>
 {{else}}

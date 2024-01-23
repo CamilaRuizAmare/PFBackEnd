@@ -1,18 +1,31 @@
 <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css">
-    <title>{{title}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/styles.css">
+<title>{{title}}</title>
 
 <div class="flex">
-    {{#if dataUser.first_name}}
-    <div>
-        Bienvenido/a, {{dataUser.first_name}} {{dataUser.last_name}}!
+    {{#if dataUser}}
+    <div class="container">
+        <h1>Bienvenido/a, {{dataUser.completeName}}!</h1>
+
+        <button id="buttonSearch" value="{{dataUser.cartID}}">
+{{!--         <a href="/api/carts/{{dataUser.cartID}}"> --}}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2"
+            viewBox="0 0 16 16">
+            <path
+                d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
+        </svg>
+{{!--         </a> --}}
+        </button>
     </div>
     <a href="/profile">
-    <button>Mi perfil</button>
+        <button>Mi perfil</button>
     </a>
     <a href="/api/sessions/logout">
-    <button>Cerrar Sesión</button>
+        <button>Cerrar Sesión</button>
+    </a>
+    <a href="/chatUsers">
+        <button>Ir al Chat</button>
     </a>
     <h1>Lista de productos:</h1>
     <div>
@@ -21,30 +34,40 @@
     </div>
     <div id="products">
         {{#each products.docs}}
-            <div id={{this._id}} class="product flex"> 
-                <h2>{{this.title}}</h2>
-                <ul>
-                    <li>Precio: $ {{this.price}}</li>
-                    <li>Categoria: {{this.category}}</li>
-                    <li>Descripción: {{this.description}}</li>
-                    <li>Stock: {{this.stock}}</li>
-                </ul>
-                <button type="submit" id={{this._id}}>Agregar al carrito</button>
-            </div>
+        <div id={{this._id}} class="product flex">
+            <h2>{{this.title}}</h2>
+            <ul>
+                <li>Precio: $ {{this.price}}</li>
+                <li>Categoria: {{this.category}}</li>
+                <li>Descripción: {{this.description}}</li>
+                <li>Stock: {{this.stock}}</li>
+            </ul>
+            <button type="submit" id={{this._id}}>Agregar al carrito</button>
+        </div>
         {{/each}}
     </div>
-{{else}}
-<div>
-    <h2>
-        Tu tiempo de sesión expiró, por favor volvé a loguearte.
-    </h2>
-    <a href="./">
-    <button>
-        Volver al Inicio
-    </button>
-    
-    </a>
-</div>
-{{/if}}
-</div> 
+    <div class="links">
+        {{#if products.hasPrevPage}}
+        <a href={{products.prevLink}}>Anterior</a>
+        {{/if}}
+        {{products.page}}
+        {{#if products.hasNextPage}}
+        <a href={{products.nextLink}}>Siguiente</a>
+        {{/if}}
+    </div>
+    {{else}}
+    <div>
+        <h2>
+            Tu tiempo de sesión expiró, por favor volvé a loguearte.
+        </h2>
+        <a href="./">
+            <button>
+                Volver al Inicio
+            </button>
 
+        </a>
+    </div>
+    {{/if}}
+</div>
+
+<script type="text/javascript" src="/js/indexCart.js"></script>

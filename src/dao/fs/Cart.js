@@ -9,7 +9,7 @@ class Cart {
         await fs.promises.writeFile(this.path, JSON.stringify(cart), 'utf-8');
     };
 
-    async readFile() {
+    async getCarts() {
         try {
             const readCarts = await fs.promises.readFile(this.path);
             const carts = JSON.parse(readCarts);

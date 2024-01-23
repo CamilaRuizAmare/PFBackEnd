@@ -20,13 +20,10 @@ const renderProducts = (products) => {
 
 const searchCart = () => {
 
-    const inputSearch = document.getElementById('searchCart')
     const buttonSearch = document.getElementById('buttonSearch');
-    const formCart = document.getElementById('formCart');
+    console.log(buttonSearch.value);
     buttonSearch.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log(inputSearch.value);
-        fetch(`/api/carts/${inputSearch.value}`)
+        fetch(`/api/carts/${buttonSearch.value}`)
             .then((response) => {
                 return response.json();
             })
@@ -36,8 +33,7 @@ const searchCart = () => {
             })
             .catch((error) => {
                 console.error(error);
-            });
-        formCart.reset();
+            });  
     });
 
 };

@@ -1,12 +1,13 @@
 import express from 'express';
-import cart from '../dao/db/Cart.js';
-import productManager from '../dao/db/ProductManager.js';
+import cart from '../../mongo/db/Cart.dao.js';
+import productManager from '../../mongo/db/ProductManager.dao.js';
+import { passportCall, authorizationUser } from '../../../utils.js';
 const cartRouter = express.Router();
 
 
-cartRouter.get('/', async (req, res) => {
+cartRouter.get('/', passportCall('jwt'), authorizationUser('Admin'), async (req, res) => {
     res.render('index', {
-        layout: 'cart'
+        layout: 'cart',
     });
 });
 
@@ -36,7 +37,9 @@ cartRouter.get('/:cid', async (req, res) => {
         const productsInCart = cartByID.products
         console.log(cartByID);
         console.log(productsInCart);
-        res.status(200).json(productsInCart);
+        return res.status(200).render('index', {
+            layout: 'cart',
+            productsInCart });
     }
     catch (err) {
         res.status(500).json({ "Error al conectar con el servidor": err.message });

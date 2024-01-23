@@ -1,8 +1,8 @@
 import passport from 'passport';
 import GitHubStrategy from 'passport-github2'
 import jwt from "passport-jwt";
-import userModel from "../dao/models/users.model.js";
-import 'dotenv/config.js'
+import userModel from "../dao/mongo/models/users.model.js";
+import config from './env.config.js'
 
 const strategyJWT = jwt.Strategy;
 const extractJWT = jwt.ExtractJwt;
@@ -17,7 +17,7 @@ const cookieExtractor = (req) => {
 const initPassport = () => {
   passport.use('jwt', new strategyJWT({
     jwtFromRequest: extractJWT.fromExtractors([cookieExtractor]),
-    secretOrKey: process.env.privateKey
+    secretOrKey: config.privateKey
   }, async (jwt_payload, done) => {
     try {
       return done(null, jwt_payload)
@@ -27,12 +27,11 @@ const initPassport = () => {
   }));
 
   passport.use('github', new GitHubStrategy({
-    clientID: process.env.gitClientId,
-    clientSecret: process.env.gitClientSecret,
-    callbackURL: process.env.gitCallbackUrl
+    clientID: config.gitClientId,
+    clientSecret: config.gitClientSecret,
+    callbackURL: config.gitCallbackUrl
   }, async (accessToken, refreshToken, profile, done) => {
     try {
-      console.log(profile)
       let user = await userModel.findOne({ email: profile._json.email });
       if (!user) {
         const userNew = {

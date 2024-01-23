@@ -1,8 +1,10 @@
 import { MongooseError } from "mongoose";
-import userModel from "../models/users.model.js";
-import { createPassHash, validatePass } from "../../utils.js";
-import cart from "../db/Cart.js";
-import { generateToken } from '../../utils.js'
+import userModel from "../dao/mongo/models/users.model.js";
+import { createPassHash, validatePass } from "../utils.js";
+import cart from "../dao/mongo/db/Cart.dao.js";
+import { generateToken } from '../utils.js'
+import config from '../config/env.config.js';
+import userDTO from "../dao/DTO/users.dto.js";
 
 export const newUser = async (req, res) => {
     try {
@@ -12,7 +14,8 @@ export const newUser = async (req, res) => {
         }
         const userNew = new userModel({ first_name, last_name, email, age, password: createPassHash(password), cart: await cart.addCart() });
         await userNew.save();
-        let token = generateToken(newUser);
+        let userToToken = new userDTO(userNew);
+        let token = generateToken(userToToken);
         res
             .status(201)
             .cookie('userToken', token, {
@@ -30,18 +33,19 @@ export const newUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+        if (email === config.userADM && password === config.passADM) {
             req.user = {
-                first_name: 'adminCoder',
+                first_name: 'Administrador',
+                email,
                 role: 'Admin'
             }
-            let token = generateToken(email)
+            let token = generateToken(req.user)
             return res
                 .status(201)
                 .cookie('userToken', token, {
                     maxAge: 900000, httpOnly: true
                 })
-                .redirect('/products');
+                .redirect('/realtimeproducts');
         }
         const userToLogin = await userModel.findOne({ email });
         if (!userToLogin) {
@@ -50,7 +54,8 @@ export const loginUser = async (req, res) => {
         if (!validatePass(userToLogin, password)) {
             return res.status(401).send('Usuario y/o contraseña invalidos');
         }
-        let token = generateToken(userToLogin)
+        let userToToken = new userDTO(userToLogin)
+        let token = generateToken(userToToken);
         res
             .status(201)
             .cookie('userToken', token, {

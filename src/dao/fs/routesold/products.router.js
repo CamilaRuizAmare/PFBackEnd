@@ -1,7 +1,7 @@
 import express from 'express';
-import productManager from '../dao/db/ProductManager.js';
-import productModel from "../dao/models/products.model.js";
-import { uploader, passportCall } from '../utils.js';
+import productManager from '../dao/db/ProductManager.dao.js';
+import productModel from "../../mongo/models/products.model.js";
+import { uploader, passportCall } from '../utils/utils.js';
 const productsRouter = express.Router();
 
 productsRouter.get('/', passportCall('jwt'), async (req, res) => {
@@ -11,12 +11,13 @@ productsRouter.get('/', passportCall('jwt'), async (req, res) => {
         for (let q in query) {
             if (q !== 'limit' && q !== 'page' && q !== 'sort') {
                 filter[q] = query[q];
-        }}
-        
+            }
+        }
+
         const option = {
             limit: query?.limit || 10,
             page: query?.page || 1,
-            sort: {price: parseInt(query?.sort) || 1},
+            sort: { price: parseInt(query?.sort) || 1 },
             lean: true,
         }
         const products = await productModel.paginate(filter, option);
@@ -28,7 +29,7 @@ productsRouter.get('/', passportCall('jwt'), async (req, res) => {
             products,
             query,
             dataUser: req.user.user,
-            
+
         });
 
     }
@@ -63,8 +64,16 @@ productsRouter.post('/', uploader.array('files'), async (req, res) => {
             thumbnail: req.files,
             category: req.body.category
         };
-        await productManager.addProduct(newProduct);
-        res.status(201).json(newProduct);
+        const productValidation = newProduct.title != '' && newProduct.description != '' && newProduct.price != '' && newProduct.code != '' && newProduct.stock != ''
+        const codeValidation = await productModel.findOne({code: newProduct.code})
+        if (productValidation && !codeValidation) {
+            await productManager.addProduct(newProduct);
+            return res.status(201).json(newProduct);
+        }
+        if (codeValidation) {
+            return res.status().json(`El producto con código ${newProduct.code} ya fue ingresado`)
+        };
+        
     }
     catch (err) {
         res.status(500).json({ "Error al conectar con el servidor": err.message });

@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from "passport";
-import {newUser, loginUser, logoutUser} from '../../dao/controllers/auth.controller.js';
+import {newUser, loginUser, logoutUser} from '../../controllers/auth.controller.js';
 import {generateToken, passportCall, authorizationUser} from '../../utils.js'
 
 
@@ -19,7 +19,7 @@ sessionRouter.get('/githubcallback', passport.authenticate('github', {failureRed
     })
     .redirect('/products');
 });
-sessionRouter.get('/current', passportCall('jwt'), authorizationUser('user'), (req, res) => {
+sessionRouter.get('/current', passportCall('jwt'), authorizationUser('Admin'), (req, res) => {
     res.send({payload: req.user})
 });
 

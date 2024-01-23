@@ -1,20 +1,20 @@
 import express from 'express';
-import { db } from './config/database.js';
+import { db } from './config/database.config.js';
 import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
-import 'dotenv/config.js';
 import initPassport from './config/passport.config.js';
-import homeRouter from './routes/home.router.js'
-import realTimeRouter from './routes/realtimeproducts.router.js';
-import { productsRouter } from './routes/products.router.js';
-import sessionRouter from './routes/api/sessions.js';
-import { cartRouter } from './routes/cart.router.js';
-import profileRouter from './routes/profile.router.js';
-import productManager from './dao/db/ProductManager.js';
-import messageModel from './dao/models/message.model.js';
+import routerGral from './routes/router.js';
+//import homeRouter from './controllers/home.controller.js'
+//import realTimeRouter from './routes/realtimeproducts.router.js';
+//import { productsRouter } from './routes/products.router.js';
+//import sessionRouter from './routes/api/sessions.js';
+//import { cartRouter } from './routes/cart.router.js';
+//import profileRouter from './routes/profile.router.js';
+import productManager from './dao/mongo/db/ProductManager.dao.js';
+import messageModel from './dao/mongo/models/message.model.js';
 
 const app = express();
 const port = 8080;
@@ -37,17 +37,18 @@ app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use('/products', productsRouter);
-app.use('/', homeRouter);
-app.use('/profile', profileRouter);
-app.use('/realtimeproducts', realTimeRouter);
-app.use('/api/sessions', sessionRouter);
-app.use('/api/products', productsRouter);
-app.use('/api/carts', cartRouter);
+//app.use('/products', productsRouter);
+//app.use('/', homeRouter);
+//app.use('/profile', profileRouter);
+//app.use('/realtimeproducts', realTimeRouter);
+//app.use('/api/sessions', sessionRouter);
+//app.use('/api/products', productsRouter);
+//app.use('/api/carts', cartRouter);
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
+routerGral(app);
 
 io.on('connection', async (socket) => {
     console.log('Cliente conectado');
