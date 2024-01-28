@@ -9,5 +9,9 @@ export default {
     gitClientSecret: process.env.gitClientSecret,
     gitCallbackUrl: process.env.gitCallbackUrl,
     userADM: process.env.adminUser,
-    passADM: process.env.adminPassword
+    passADM: process.env.adminPassword,
+    mailUser: process.env.mailUser,
+    mailPassword: process.env.mailPassword,
+    serviceMail: process.env.serviceMail,
+    serviceMailPort: process.env.serviceMailPort
 }

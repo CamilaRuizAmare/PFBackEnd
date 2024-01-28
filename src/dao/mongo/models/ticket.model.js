@@ -7,5 +7,8 @@ const ticketSchema = new mongoose.Schema({
     code: {type: String, default:uuidv4()},
     purchase_datetime: Date,
     amount: Number,
-    purcharser: String //Ver si hay que referenciarlo!
+    purcharser: String, //Ver si hay que referenciarlo!
 });
+
+const ticketModel = mongoose.model(collectionTickets, ticketSchema);
+export default ticketModel;

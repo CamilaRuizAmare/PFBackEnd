@@ -42,7 +42,7 @@
                 <li>Descripción: {{this.description}}</li>
                 <li>Stock: {{this.stock}}</li>
             </ul>
-            <button type="submit" id={{this._id}}>Agregar al carrito</button>
+            <button type="submit" class="buttonProduct" value={{this._id}}>Agregar al carrito</button>
         </div>
         {{/each}}
     </div>
@@ -70,4 +70,5 @@
     {{/if}}
 </div>
 
-<script type="text/javascript" src="/js/indexCart.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="/js/indexProducts.js"></script>

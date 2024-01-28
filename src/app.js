@@ -5,6 +5,7 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import initPassport from './config/passport.config.js';
 import routerGral from './routes/router.js';
 //import homeRouter from './controllers/home.controller.js'
@@ -28,6 +29,8 @@ const hbs = handlebars.create({
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true,
+        allowedProtoMethods: true,
+        
     },
 });
 
@@ -37,6 +40,7 @@ app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+app.use(cors());
 //app.use('/products', productsRouter);
 //app.use('/', homeRouter);
 //app.use('/profile', profileRouter);
