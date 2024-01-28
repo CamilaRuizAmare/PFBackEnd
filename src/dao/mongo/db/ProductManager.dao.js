@@ -9,25 +9,6 @@ class ProductManager {
     };
 
     async addProduct(newProduct) {
-        /* const products = await productModel.find();
-        const product = {
-            title: newProduct.title,
-            price: newProduct.price,
-            code: newProduct.code,
-            description: newProduct.description,
-            thumbnail: newProduct.thumbnail,
-            stock: newProduct.stock,
-            status: newProduct.status
-        };
-        const productNew = new productModel(product);
-        const productValidation = product.title != '' && product.description != '' && product.price != '' && product.code != '' && product.stock != ''
-        if (productValidation) {
-            const productSave = await productNew.save();
-            return productSave;
-        }
-        else {
-            return `El producto con código ${product.code} ya fue ingresado`
-        }; */
         const productNew = new productModel(newProduct);
         const productSave = await productNew.save();
         return productSave;

@@ -49,9 +49,7 @@ const addProduct = () => {
 const searchCart = () => {
 
     const buttonSearch = document.getElementById('buttonSearch');
-    //console.log(buttonSearch.value);
     buttonSearch.addEventListener('click', (e) => {
-        //window.location.replace(`/api/carts/${buttonSearch.value}`);
         fetch(`/api/carts/${buttonSearch.value}`)
             .then((response) => {
                 response.json();

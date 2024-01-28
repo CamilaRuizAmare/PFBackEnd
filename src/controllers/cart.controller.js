@@ -45,7 +45,6 @@ cartRouter.get('/:cid', passportCall('jwt'), async (req, res) => {
             dataUser: req.user,
             productsInCart,
         })
-        //res.status(200).json(productsInCart);
     }
     catch (err) {
         res.status(500).json({ "Internal Server Error": err.message });
@@ -103,10 +102,6 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
                     subject: `Tu compra N° ${ticketOK.code} ha sido realizada`,
                     html
                 };
-                /* const destination = {
-                    to: req.user.user.email,
-                    subjet: ticketOK.code,
-                }; */
                 const sendMail = await transport.sendMail(infoUser);
                 res.status(201).json({ 'Purchased products': sendMail, 'Products In Cart': cartByID })
             } else {

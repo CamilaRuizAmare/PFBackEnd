@@ -49,11 +49,6 @@ class Cart {
             return deleteCart;
         };
     };
-
-    /* async deleteItemToCart(idCart, idItem) {
-        const ItemsTocart = await cartModel.findById(idCart).products
-    } */
-
     
 };
 

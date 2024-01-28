@@ -8,12 +8,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import initPassport from './config/passport.config.js';
 import routerGral from './routes/router.js';
-//import homeRouter from './controllers/home.controller.js'
-//import realTimeRouter from './routes/realtimeproducts.router.js';
-//import { productsRouter } from './routes/products.router.js';
-//import sessionRouter from './routes/api/sessions.js';
-//import { cartRouter } from './routes/cart.router.js';
-//import profileRouter from './routes/profile.router.js';
 import productManager from './dao/mongo/db/ProductManager.dao.js';
 import messageModel from './dao/mongo/models/message.model.js';
 
@@ -30,7 +24,7 @@ const hbs = handlebars.create({
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true,
         allowedProtoMethods: true,
-        
+
     },
 });
 
@@ -41,13 +35,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
-//app.use('/products', productsRouter);
-//app.use('/', homeRouter);
-//app.use('/profile', profileRouter);
-//app.use('/realtimeproducts', realTimeRouter);
-//app.use('/api/sessions', sessionRouter);
-//app.use('/api/products', productsRouter);
-//app.use('/api/carts', cartRouter);
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
