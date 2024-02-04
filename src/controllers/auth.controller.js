@@ -5,12 +5,21 @@ import cart from "../dao/mongo/db/Cart.dao.js";
 import { generateToken } from '../utils.js'
 import config from '../config/env.config.js';
 import userDTO from "../dao/DTO/users.dto.js";
+import errorCustom from '../utils/custom.error.js';
+import generateNewUserError from '../utils/info.error.js';
+import infoErrors from '../utils/enum.error.js'
 
 export const newUser = async (req, res) => {
     try {
         const { first_name, last_name, email, age, password } = req.body;
         if (!first_name || !last_name || !email || !password) {
-            res.status(401).send({ error: 'Incomplete values' })
+            const error = errorCustom.newError({
+                name: 'User creation error',
+                cause: generateNewUserError({first_name, last_name, email, password}),
+                message: 'Error creating user',
+                code: infoErrors.infoNewUserError
+            })
+            res.status(401).json(error)
         }
         const userNew = new userModel({ first_name, last_name, email, age, password: createPassHash(password), cart: await cart.addCart() });
         await userNew.save();
@@ -24,9 +33,9 @@ export const newUser = async (req, res) => {
             .redirect('/products');
     } catch (error) {
         if (MongooseError) {
-            res.status(409).send({ error: 'El email ingresado ya está registrado' })
+            res.status(409).json(error)
         }
-        console.log('Error al crear el usuario', error);
+        console.log(error);
     }
 };
 

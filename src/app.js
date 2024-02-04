@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'express-compression';
 import { db } from './config/database.config.js';
 import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
@@ -10,6 +11,7 @@ import initPassport from './config/passport.config.js';
 import routerGral from './routes/router.js';
 import productManager from './dao/mongo/db/ProductManager.dao.js';
 import messageModel from './dao/mongo/models/message.model.js';
+import handlerError from './middlewares/errorControl/handler.error.js';
 
 const app = express();
 const port = 8080;
@@ -30,11 +32,15 @@ const hbs = handlebars.create({
 
 app.use(cookieParser());
 initPassport();
+app.use(compression({
+    broli:{enable:true,zlib:{}}
+}))
 app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
+app.use(handlerError);
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');

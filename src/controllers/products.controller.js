@@ -2,6 +2,9 @@ import express from 'express';
 import productManager from '../dao/mongo/db/ProductManager.dao.js';
 import productModel from '../dao/mongo/models/products.model.js';
 import { uploader, passportCall, authorizationUser } from '../utils.js';
+import errorCustom from '../utils/custom.error.js';
+import generateProductCreateError from '../utils/info.error.js';
+import infoErrors from '../utils/enum.error.js'
 
 const productsRouter = express.Router();
 
@@ -74,12 +77,18 @@ productsRouter.post('/', uploader.array('files'), async (req, res) => {
             return res.status(409).json(`El producto con código ${newProduct.code} ya fue ingresado`)
         };
         if (!productValidation) {
-            return res.status(401).json({ error: 'Incomplete values' })
+            const error = errorCustom.newError({
+                name: 'Product creation error',
+                cause: generateProductCreateError({ title: newProduct.title, description: newProduct.description, price: newProduct.price, code: newProduct.code, stock: newProduct.stock }),
+                message: 'Error creating product',
+                code: infoErrors.productCreateError
+            })
+            res.status(401).json(error)
         };
 
     }
     catch (err) {
-        res.status(500).json({ "Internal Server Error": err.message });
+        res.status(500).json(err);
     }
 });
 

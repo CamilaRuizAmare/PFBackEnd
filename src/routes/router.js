@@ -5,6 +5,7 @@ import editProductsRouter from '../controllers/editProducts.controller.js';
 import sessionRouter from './api/sessions.js';
 import profileRouter from '../controllers/profile.controller.js';
 import chatRouter from '../controllers/chat.controller.js';
+import mockingRouter from '../controllers/mocking.controller.js';
 
 
 const routerGral = (app) => {
@@ -14,7 +15,8 @@ const routerGral = (app) => {
     app.use('/realtimeproducts', editProductsRouter);
     app.use('/api/sessions', sessionRouter);
     app.use('/profile', profileRouter);
-    app.use('/chatUsers', chatRouter)
+    app.use('/chatUsers', chatRouter);
+    app.use('/mockingproducts', mockingRouter)
 
 }
 
