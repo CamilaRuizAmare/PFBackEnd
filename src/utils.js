@@ -29,7 +29,6 @@ export const validatePass = (user, password) =>
 
 export const generateToken = (user) => {
   const token = jwt.sign({ user }, privateKey, { expiresIn: '2h' });
-  console.log(token);
   return token;
 };
 
@@ -37,9 +36,11 @@ export const generateToken = (user) => {
 export const authorizationUser = (role) => {
   return async (req, res, next) => {
     if (!req.user) {
+      req.logger.ERROR('You must be logged in')
       return res.status(401).send({ error: 'Unauthorized user' })
     };
     if (req.user.user.role != role) {
+      req.logger.ERROR('User without permissions')
       return res.status(403).send({ error: 'User without permissions' })
     }
     next();
@@ -70,19 +71,6 @@ export const transport = nodemailer.createTransport({
   }
 });
 
-export const mailSend = (dataMail) => {
-  const html = `
-  <html>
-    <div>
-      <h3>${dataMail.name}, tu compra fué realizada</h3>
-      <p> Los detalles de tu compra son: 
-      ${dataMail.ticket}</p>
-      <h4>Recordá tener tu N° de compra al momento de recibir o retirar el pedido!</h4>
-    </div>
-  </html>
-`;
-
-}
 
 export default __dirname;
 export const uploader = multer({ storage })

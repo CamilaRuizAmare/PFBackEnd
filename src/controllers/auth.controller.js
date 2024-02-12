@@ -35,7 +35,7 @@ export const newUser = async (req, res) => {
         if (MongooseError) {
             res.status(409).json(error)
         }
-        console.log(error);
+        req.logger.ERROR(error);
     }
 };
 
@@ -72,7 +72,7 @@ export const loginUser = async (req, res) => {
             })
             .redirect('/products');
     } catch (error) {
-        console.log('Error al iniciar sesión', error);
+        req.logger.ERROR('Error al iniciar sesión', error);
     }
 };
 
@@ -87,7 +87,7 @@ export const logoutUser = async (req, res) => {
         };
     }
      catch (error) {
-    console.log("Error al cerrar la sesión", error);
+    req.logger.ERROR("Error al cerrar la sesión", error);
     res.status(500).send("Error al cerrar la sesión");
 }
 };

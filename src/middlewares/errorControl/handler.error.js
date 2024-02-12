@@ -1,7 +1,7 @@
 import infoErrors from '../../utils/enum.error.js';
 
 export default (error, req, res, next) => {
-    console.log(error.cause)
+    req.logger.ERROR(error.cause)
 
 
     switch (error.code) {

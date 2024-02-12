@@ -1,7 +1,13 @@
 import dotenv from 'dotenv';
-dotenv.config();
+
+const ENV = 'development';
+dotenv.config({
+    path: `./.env.${ENV}`
+});
 
 export default {
+    enviroment: ENV,
+    port: process.env.port || 8080,
     dbUrl: process.env.mongo_url,
     privateKey: process.env.privateKey,
     gitAppId: process.env.gitAppId,

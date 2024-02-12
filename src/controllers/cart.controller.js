@@ -3,7 +3,7 @@ import cart from '../dao/mongo/db/Cart.dao.js';
 import productManager from '../dao/mongo/db/ProductManager.dao.js';
 import newTicket from '../dao/mongo/db/Ticket.dao.js';
 import config from '../config/env.config.js'
-import { passportCall, transport, mailSend } from '../utils.js';
+import { passportCall, transport } from '../utils.js';
 
 const cartRouter = express.Router();
 
@@ -20,9 +20,10 @@ cartRouter.post('/', async (req, res) => {
     try {
         const newCart = await cart.addCart();
         res.status(201).json(newCart);
-        console.log(newCart);
+        req.logger.INFO(newCart);
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     };
 
@@ -35,18 +36,20 @@ cartRouter.get('/:cid', passportCall('jwt'), async (req, res) => {
         const cartID = req.params.cid;
         const cartByID = await cart.getCart(cartID);
         if (!cartByID) {
+            req.logger.WARNING('Cart not found');
             res.status(404).json({ message: "Cart not found" });
         };
         const productsInCart = cartByID.products
-        console.log(cartByID);
-        console.log(req.user);
+        req.logger.INFO(cartByID);
         res.status(200).render("index", {
             layout: 'cart',
             dataUser: req.user,
             productsInCart,
         })
+        /* res.status(200).json(productsInCart); */
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     };
 });
@@ -56,6 +59,7 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
         const cartID = req.params.cid;
         const cartByID = await cart.getCart(cartID);
         if (!cartByID) {
+            req.logger.WARNING('Cart not found');
             res.status(404).json({ message: "Cart not found" });
         };
         const productsInCart = cartByID.products
@@ -68,7 +72,7 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
                 if (product.quantity <= productStock.stock) {
                     productManager.updateProduct(product._id, { stock: (productStock.stock - product.quantity) });
                     amount += (product.quantity * product._id.price);
-                    console.log('precio', amount, productStock.stock, product.quantity);
+                    req.logger.INFO('precio', amount, productStock.stock, product.quantity);
                     purchasedProducts.push(product);
                     const validationProduct = cartByID.products.findIndex((p) => p._id === product._id);
                     cartByID.products.splice(validationProduct, 1);
@@ -79,7 +83,6 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
                 }
             }
             if (purchasedProducts.length > 0) {
-                console.log(req.user)
                 const ticketNew = {
                     purchase_datetime: new Date().toString(),
                     amount: amount,
@@ -105,10 +108,12 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
                 const sendMail = await transport.sendMail(infoUser);
                 res.status(201).json({ 'Purchased products': sendMail, 'Products In Cart': cartByID })
             } else {
+                req.logger.WARNING('The products you are trying to buy do not have available stock');
                 res.status(409).json({ 'The products you are trying to buy do not have available stock': productsOut })
             }
         }
     } catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     }
 });
@@ -122,6 +127,7 @@ cartRouter.post('/:cid/product/:pid', async (req, res) => {
         const cartByID = await cart.getCart(cartID);
         const productByID = await productManager.getProductById(productID);
         if (!cartByID || !productByID) {
+            req.logger.WARNING('Cart or product not found');
             res.status(404).json({ message: "Cart or product not found" });
         }
         const validationProduct = cartByID.products.findIndex((p) => p._id._id === productID);
@@ -139,6 +145,7 @@ cartRouter.post('/:cid/product/:pid', async (req, res) => {
         return res.status(201).json(updateCart);
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     }
 });
@@ -153,9 +160,9 @@ cartRouter.put('/:cid', async (req, res) => {
             const idProduct = product._id;
             const quantity = product.quantity;
             const newProduct = { idProduct, quantity }
-
-            console.log(idProduct, quantity);
+            req.logger.INFO(idProduct, quantity);
             if (!idProduct || !quantity) {
+                req.logger.WARNING('Incomplete info');
                 return res.status(404).json({ message: "Incomplete or invalid info" });
             }
             cartByID.products.push(newProduct);
@@ -165,6 +172,7 @@ cartRouter.put('/:cid', async (req, res) => {
 
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message }); res.status(500).json({ "Error al conectar con el servidor": err.message });
     };
 });
@@ -179,10 +187,11 @@ cartRouter.put('/:cid/product/:pid', async (req, res) => {
         const cartByID = await cart.getCart(cartID);
         const productByID = await productManager.getProductById(productID);
         if (!cartByID || !productByID) {
+            req.logger.WARNING('Cart or product not found');
             return res.status(404).json({ message: "Cart or product not found" });
         }
         const validationProduct = cartByID.products.findIndex((p) => p._id === productID);
-        console.log(validationProduct, cartByID, quantityReq);
+        req.logger.INFO(validationProduct, cartByID, quantityReq);
         if (validationProduct === -1) {
             const newProduct = {
                 _id: productID,
@@ -197,6 +206,7 @@ cartRouter.put('/:cid/product/:pid', async (req, res) => {
         return res.status(201).json(updateCart);
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     }
 });
@@ -209,8 +219,8 @@ cartRouter.delete('/:cid/product/:pid', async (req, res) => {
         const productID = req.params.pid;
         const cartByID = await cart.getCart(cartID);
         const validationProduct = cartByID.products.findIndex((p) => p._id === productID);
-        console.log(cartByID, productID, validationProduct, cartID);
         if (!cartByID || validationProduct === -1) {
+            req.logger.WARNING('Cart or product not found');
             return res.status(404).json({ message: "Cart or product not found" });
         }
         const productDelete = cartByID.products[validationProduct];
@@ -219,6 +229,7 @@ cartRouter.delete('/:cid/product/:pid', async (req, res) => {
         return res.status(200).json({ 'Removed product': productDelete });
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     }
 });
@@ -230,6 +241,7 @@ cartRouter.delete('/:cid', async (req, res) => {
         const cartID = req.params.cid;
         const cartByID = await cart.getCart(cartID);
         if (!cartByID) {
+            req.logger.WARNING('Cart not found');
             return res.status(404).json({ message: "Cart not found" });
         }
         cartByID.products = [];
@@ -237,6 +249,7 @@ cartRouter.delete('/:cid', async (req, res) => {
         return res.status(200).json({ 'Removed products': emptyCart });
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     }
 });

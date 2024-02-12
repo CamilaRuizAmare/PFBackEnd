@@ -1,7 +1,7 @@
-const renderProducts = (products) => {
+const renderProducts = async (products) => {
     const divProducts = document.getElementById('productsCartDiv');
     divProducts.innerHTML = ``
-    products.forEach((product) => {
+    await products.forEach((product) => {
         divProducts.innerHTML += `
             <div id=${product._id._id} class="product flex"> 
                 <h2>${product._id.title}</h2>
@@ -54,10 +54,10 @@ const searchCart = () => {
             .then((response) => {
                 response.json();
             })
-            .then((data) => {
+            .then(async (data) => {
                 console.log(data);
                 window.location.replace(`/api/carts/${buttonSearch.value}`);
-                renderProducts(data); 
+                await renderProducts(data); 
             })
             .catch((error) => {
                 console.error(error);

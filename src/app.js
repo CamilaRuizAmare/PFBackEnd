@@ -8,13 +8,15 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import initPassport from './config/passport.config.js';
+import config from './config/env.config.js'
 import routerGral from './routes/router.js';
+import addLogger from './middlewares/loggers/loggers.js'
 import productManager from './dao/mongo/db/ProductManager.dao.js';
 import messageModel from './dao/mongo/models/message.model.js';
 import handlerError from './middlewares/errorControl/handler.error.js';
 
 const app = express();
-const port = 8080;
+const port = config.port;
 const httpServer = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
@@ -41,6 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
 app.use(handlerError);
+app.use(addLogger);
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
@@ -48,7 +51,7 @@ app.set('view engine', 'handlebars');
 routerGral(app);
 
 io.on('connection', async (socket) => {
-    console.log('Cliente conectado');
+    req.logger.INFO('Cliente conectado');
     const products = await productManager.getProducts();
     socket.emit('products', products);
     socket.on('addProduct', async (data) => {
@@ -57,7 +60,7 @@ io.on('connection', async (socket) => {
             const updateProducts = await productManager.getProducts();
             io.emit('products', updateProducts);
         } catch (error) {
-            console.log(error.message);
+            req.logger.ERROR(error.message);
         }
     });
     socket.on('deleteProduct', async (data) => {
@@ -65,11 +68,11 @@ io.on('connection', async (socket) => {
             const idDeleted = await productManager.deleteProduct(data);
             const updateProducts = await productManager.getProducts();
             io.emit('products', updateProducts);
-            console.log(idDeleted);
+            req.logger.INFO(idDeleted);
             io.emit('idDeleted', idDeleted);
         }
         catch (err) {
-            console.log('Error: ', err)
+            req.logger.ERROR('Error: ', err)
         }
     });
     const messages = await messageModel.find();
@@ -82,7 +85,7 @@ io.on('connection', async (socket) => {
             socket.emit('messages', messages);
         }
         catch (err) {
-            console.log('Error: ', err)
+            req.logger.ERROR('Error: ', err)
         }
     })
 });

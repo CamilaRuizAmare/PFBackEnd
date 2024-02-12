@@ -37,6 +37,7 @@ productsRouter.get('/', passportCall('jwt'), authorizationUser('user'), async (r
 
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     }
 
@@ -47,11 +48,13 @@ productsRouter.get('/:pid', async (req, res) => {
         const productID = req.params.pid;
         const productByID = await productManager.getProductById(productID);
         if (!productByID) {
+            req.logger.WARNING('Product by ID not found')
             res.status(404).json({ message: "Product not found" });
         };
         res.status(200).json(productByID);
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     }
 });
@@ -74,7 +77,8 @@ productsRouter.post('/', uploader.array('files'), async (req, res) => {
             return res.status(201).json(newProduct);
         }
         if (codeValidation) {
-            return res.status(409).json(`El producto con código ${newProduct.code} ya fue ingresado`)
+            req.logger.WARNING('Product has already been entered')
+            return res.status(409).json(`The product with code ${newProduct.code} has already been entered`)
         };
         if (!productValidation) {
             const error = errorCustom.newError({
@@ -83,11 +87,13 @@ productsRouter.post('/', uploader.array('files'), async (req, res) => {
                 message: 'Error creating product',
                 code: infoErrors.productCreateError
             })
+            req.logger.ERROR('Product creation error', error)
             res.status(401).json(error)
         };
 
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json(err);
     }
 });
@@ -97,12 +103,14 @@ productsRouter.put('/:pid', uploader.array('files'), async (req, res) => {
         const productID = req.params.pid;
         const productByID = await productManager.updateProduct(productID);
         if (!productByID) {
+            req.logger.WARNING('Product by ID not found')
             res.status(404).json({ message: "Product not found" });
         } else {
             res.status(201).json(productByID);
         };
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     };
 });
@@ -112,11 +120,13 @@ productsRouter.delete('/:pid', async (req, res) => {
         const productID = req.params.pid;
         const productByID = await productManager.deleteProduct(productID);
         if (!productByID) {
+            req.logger.WARNING('Product by ID not found')
             res.status(404).json({ message: "Product not found" });
         };
         res.status(200).json({ "Deleted product:": productByID });
     }
     catch (err) {
+        req.logger.ERROR(err);
         res.status(500).json({ "Internal Server Error": err.message });
     }
 });
