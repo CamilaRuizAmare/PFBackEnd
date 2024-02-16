@@ -17,7 +17,7 @@ const productSchema = new mongoose.Schema({
     category: String,
     stock: Number,
     status: {type: Boolean, default: true},
-    esVisible: {type: Boolean, default: false}
+    owner: String,
 });
 
 productSchema.plugin(mongoosePaginate);

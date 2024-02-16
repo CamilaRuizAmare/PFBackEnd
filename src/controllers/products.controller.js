@@ -8,7 +8,7 @@ import infoErrors from '../utils/enum.error.js'
 
 const productsRouter = express.Router();
 
-productsRouter.get('/', passportCall('jwt'), authorizationUser('user'), async (req, res) => {
+productsRouter.get('/', passportCall('jwt'), authorizationUser('user', 'Premium'), async (req, res) => {
     try {
         const query = req.query;
         const filter = {};
@@ -59,7 +59,7 @@ productsRouter.get('/:pid', async (req, res) => {
     }
 });
 
-productsRouter.post('/', uploader.array('files'), async (req, res) => {
+productsRouter.post('/', uploader.array('files'), passportCall('jwt'), async (req, res) => {
     try {
         const newProduct = {
             title: req.body.title,
@@ -68,13 +68,17 @@ productsRouter.post('/', uploader.array('files'), async (req, res) => {
             stock: req.body.stock,
             code: req.body.code,
             thumbnail: req.files,
-            category: req.body.category
+            category: req.body.category,
+            owner: req.user.user.email || 'Admin'
         };
+        req.logger.DEBUG(newProduct.title, newProduct.description, newProduct.price);
+        req.logger.DEBUG(req.user.user.email);
         const productValidation = newProduct.title != '' && newProduct.description != '' && newProduct.price != '' && newProduct.code != '' && newProduct.stock != ''
         const codeValidation = await productModel.findOne({ code: newProduct.code })
+        req.logger.DEBUG(codeValidation)
         if (productValidation && !codeValidation) {
             await productManager.addProduct(newProduct);
-            return res.status(201).json(newProduct);
+            return res.status(201).redirect('/realtimeproducts');
         }
         if (codeValidation) {
             req.logger.WARNING('Product has already been entered')
@@ -88,7 +92,7 @@ productsRouter.post('/', uploader.array('files'), async (req, res) => {
                 code: infoErrors.productCreateError
             })
             req.logger.ERROR('Product creation error', error)
-            res.status(401).json(error)
+            return res.status(401).json(error)
         };
 
     }
@@ -115,15 +119,25 @@ productsRouter.put('/:pid', uploader.array('files'), async (req, res) => {
     };
 });
 
-productsRouter.delete('/:pid', async (req, res) => {
+productsRouter.delete('/:pid', passportCall('jwt'), async (req, res) => {
     try {
+        const user = req.user.user;
         const productID = req.params.pid;
-        const productByID = await productManager.deleteProduct(productID);
-        if (!productByID) {
+        const productToDelete = await productManager.getProductById(productID);
+        const validationOwner = productToDelete.owner === user.email
+        req.logger.DEBUG(validationOwner)
+        req.logger.DEBUG(productID);
+        if (!productToDelete) {
             req.logger.WARNING('Product by ID not found')
-            res.status(404).json({ message: "Product not found" });
+            return res.status(404).json({ message: "Product not found" });
         };
-        res.status(200).json({ "Deleted product:": productByID });
+        if(validationOwner === false && user.role != 'Admin') {
+            req.logger.ERROR('User without permissions to delete this product')
+            return res.status(403).json({'Error': 'User without permissions to delete this product'})
+        }
+        const productByID = await productManager.deleteProduct(productID);
+        req.logger.DEBUG(productByID)
+        return res.status(200).json({ "Deleted product:": productByID });
     }
     catch (err) {
         req.logger.ERROR(err);

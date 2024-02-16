@@ -28,18 +28,23 @@ export const validatePass = (user, password) =>
   bcrypt.compareSync(password, user.password);
 
 export const generateToken = (user) => {
-  const token = jwt.sign({ user }, privateKey, { expiresIn: '2h' });
+  const token = jwt.sign({ user }, privateKey, { expiresIn: '3600000' });
   return token;
 };
 
+export const tokenToRecoveryPass = (user, date) => {
+  const token = jwt.sign({ user, date }, privateKey, { expiresIn: '3600000' });
+  return token;
+}
 
-export const authorizationUser = (role) => {
+
+export const authorizationUser = (role1, role2) => {
   return async (req, res, next) => {
     if (!req.user) {
       req.logger.ERROR('You must be logged in')
       return res.status(401).send({ error: 'Unauthorized user' })
     };
-    if (req.user.user.role != role) {
+    if (req.user.user.role != role1 && req.user.user.role != role2) {
       req.logger.ERROR('User without permissions')
       return res.status(403).send({ error: 'User without permissions' })
     }
@@ -68,7 +73,7 @@ export const transport = nodemailer.createTransport({
   auth: {
     user: config.mailUser,
     pass: config.mailPassword,
-  }
+  },
 });
 
 

@@ -7,9 +7,11 @@ const userSchema = new mongoose.Schema({
     email: {type: String, unique: true},
     age: Number,
     password: String,
+    tokenRecoveryPass: String,
+    dateToken: Date,
     role: {type: String, default: 'user'},
     cart: {
-        _id: {type: String, unique: true, ref: 'carts'},
+        _id: {type: String, ref: 'carts'},
         status: {type: String, default: 'open'}
     }
 });

@@ -1,0 +1,91 @@
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined {"kind":"string","path":"email","reason":null,"stringValue":"\"{ email: 'camy.dlgp@gmail.com' }\"","value":{"email":"camy.dlgp@gmail.com"},"valueType":"Object"}
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: Acá esta el tema
+ERROR: Acá esta el tema
+ERROR: User without permissions
+ERROR: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"{ user: undefined }\"","value":{},"valueType":"Object"}
+ERROR: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"{}\"","value":{},"valueType":"Object"}
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: User without permissions
+ERROR: User without permissions
+ERROR: User without permissions
+ERROR: User without permissions
+ERROR: User without permissions
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined {"code":11000,"index":0,"keyPattern":{"_id":1},"keyValue":{"_id":"b9249487-4507-45fd-acac-fdfa668d1d96"}}
+ERROR: User without permissions to delete this product
+ERROR: undefined
+ERROR: User without permissions to delete this product
+ERROR: User without permissions to delete this product
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined {"kind":"string","path":"_id","reason":null,"stringValue":"\"{}\"","value":{},"valueType":"Object"}
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined {"kind":"string","path":"_id","reason":null,"stringValue":"\"{ productID: undefined }\"","value":{},"valueType":"Object"}
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: User without permissions to delete this product
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: undefined
+ERROR: User without permissions to delete this product
+ERROR: User without permissions to delete this product
+ERROR: User without permissions to delete this product
+ERROR: User without permissions to delete this product
+ERROR: User without permissions to delete this product
+ERROR: User without permissions to delete this product
+ERROR: User without permissions to delete this product
+ERROR: User without permissions to delete this product

@@ -120,16 +120,22 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
 
 //Busca el carrito y agrega un producto o incrementa su cantidad.
 
-cartRouter.post('/:cid/product/:pid', async (req, res) => {
+cartRouter.post('/:cid/product/:pid', passportCall('jwt'),  async (req, res) => {
     try {
         const cartID = req.params.cid;
         const productID = req.params.pid;
         const cartByID = await cart.getCart(cartID);
         const productByID = await productManager.getProductById(productID);
+        const user = req.user.user.email;
+        req.logger.DEBUG(productByID.owner, user)
         if (!cartByID || !productByID) {
             req.logger.WARNING('Cart or product not found');
-            res.status(404).json({ message: "Cart or product not found" });
+            return res.status(404).json({ message: "Cart or product not found" });
         }
+        if(productByID.owner === user) {
+           return req.logger.WARNING('You cannot add your own products')
+        }
+        req.logger.DEBUG(req.user.user.email);
         const validationProduct = cartByID.products.findIndex((p) => p._id._id === productID);
         if (validationProduct === -1) {
             const newProduct = {
@@ -179,16 +185,20 @@ cartRouter.put('/:cid', async (req, res) => {
 
 //Actualiza quantity del producto buscado en el carrito. Si no se envia cantidad, incrementa en 1.
 
-cartRouter.put('/:cid/product/:pid', async (req, res) => {
+cartRouter.put('/:cid/product/:pid', passportCall('jwt'), async (req, res) => {
     try {
         const cartID = req.params.cid;
         const productID = req.params.pid;
         const quantityReq = req.body.quantity;
         const cartByID = await cart.getCart(cartID);
         const productByID = await productManager.getProductById(productID);
+        const user = req.user.user.role;
         if (!cartByID || !productByID) {
             req.logger.WARNING('Cart or product not found');
             return res.status(404).json({ message: "Cart or product not found" });
+        }
+        if(productByID.owner === user) {
+            req.logger.WARNING('You cannot add your own products')
         }
         const validationProduct = cartByID.products.findIndex((p) => p._id === productID);
         req.logger.INFO(validationProduct, cartByID, quantityReq);

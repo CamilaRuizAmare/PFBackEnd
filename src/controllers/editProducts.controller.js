@@ -4,7 +4,7 @@ import productManager from '../dao/mongo/db/ProductManager.dao.js';
 
 const editProductsRouter = express.Router();
 
-editProductsRouter.get('/', passportCall('jwt'), authorizationUser('Admin'), async (req, res) => {
+editProductsRouter.get('/', passportCall('jwt'), authorizationUser('Admin', 'Premium'), async (req, res) => {
     const products = await productManager.getProducts();
     res.render('index', {
         layout: 'realTimeProducts',

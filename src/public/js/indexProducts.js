@@ -22,23 +22,23 @@ const addProduct = () => {
     console.log(buttonSearch);
     for (const button of buttonProduct) {
         button.addEventListener('click', () => {
-            fetch(`/api/carts/${buttonSearch}/product/${button.value}`, {method: 'POST'})
-            .then((response) => {
-                response.json();
-            })
-            .then((data) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Producto Agregado Al carrito',
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 600,
-                    timerProgressBar: true,
-                  });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            fetch(`/api/carts/${buttonSearch}/product/${button.value}`, { method: 'POST' })
+                .then((response) => {
+                    response.json();
+                })
+                .then((data) => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Producto Agregado Al carrito',
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 600,
+                        timerProgressBar: true,
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         });
     }
 }
@@ -57,7 +57,7 @@ const searchCart = () => {
             .then(async (data) => {
                 console.log(data);
                 window.location.replace(`/api/carts/${buttonSearch.value}`);
-                await renderProducts(data); 
+                await renderProducts(data);
             })
             .catch((error) => {
                 console.error(error);

@@ -18,11 +18,11 @@ socket.on('products', (data) => {
 
 
 
-const addProduct = document.getElementById('addProductButton');
+//const addProduct = document.getElementById('addProductButton');
 const deleteProduct = document.getElementById('deleteProductButton');
 const formAddProduct = document.getElementById('addProduct');
 const formDeleteProduct = document.getElementById('deleteProduct');
-addProduct.addEventListener('click', (e) => {
+/* addProduct.addEventListener('click', (e) => {
   e.preventDefault();
   let title = document.getElementById('title').value;
   let description = document.getElementById('description').value;
@@ -43,7 +43,6 @@ addProduct.addEventListener('click', (e) => {
     });
     return;
   }
-
   const newProduct = {
     title: title,
     description: description,
@@ -63,9 +62,10 @@ addProduct.addEventListener('click', (e) => {
     timerProgressBar: true,
   });
   formAddProduct.reset();
-});
+}); */
 
-deleteProduct.addEventListener('click', (e) => {
+
+deleteProduct.addEventListener('click', async (e) => {
   e.preventDefault();
   let idToDelete = document.getElementById('id').value;
   Swal.fire({
@@ -78,29 +78,24 @@ deleteProduct.addEventListener('click', (e) => {
     confirmButtonText: 'Borrar'
   }).then((result) => {
     if (result.isConfirmed) {
-      socket.emit('deleteProduct', idToDelete);
-      socket.on('idDeleted', (data) => {
-        if (!data) {
-          Swal.fire({
-            title: 'Error',
-            text: `El producto no existe o no se ha encontrado`,
-            icon: 'error',
-            timer: 1500,
-            showConfirmButton: false
-          });
-        }
-        else {
           Swal.fire({
             title: 'Producto Borrado',
             text: `El producto bajo el ID ${idToDelete} ha sido eliminado`,
             icon: 'success',
             timer: 1500,
             showConfirmButton: false
-          });
-          formDeleteProduct.reset();
-        }
-      })
+          });     
     }
   })
+  fetch(`/products/${idToDelete}`, { method: 'delete' })
+    .then((response) => {
+      response.json();
+    })
+    .then((data) => {
+      formDeleteProduct.reset();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 

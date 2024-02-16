@@ -21,6 +21,14 @@
         <h3>Perfil de usuario: </h3>
         <p>{{profileUser.role}}</p>
     </div>
+    <div class="cardUser">
+        <h3>Modifica tu suscripción</h3>
+        <form action="api/users/premium/{{profileUser._id}}">
+        <button type="submit">
+            Modificar
+        </button>
+        </form>
+    </div>
     <div>
         <a href="/realTimeProducts">
             <button>

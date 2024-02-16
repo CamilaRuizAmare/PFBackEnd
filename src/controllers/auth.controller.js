@@ -73,6 +73,7 @@ export const loginUser = async (req, res) => {
             .redirect('/products');
     } catch (error) {
         req.logger.ERROR('Error al iniciar sesión', error);
+        res.status(500).json({error: error.message});
     }
 };
 

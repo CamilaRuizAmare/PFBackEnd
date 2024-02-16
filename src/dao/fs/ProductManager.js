@@ -21,7 +21,8 @@ class ProductManager {
                 description: newProduct.description,
                 thumbnail: newProduct.thumbnail,
                 stock: newProduct.stock,
-                status
+                status,
+                owner,
             };
             const codeValidation = file.find(data => data.code === newProduct.code);
             const productValidation = product.title != '' && product.description != '' && product.price != '' && product.code != '' && product.stock != ''

@@ -51,28 +51,25 @@ app.set('view engine', 'handlebars');
 routerGral(app);
 
 io.on('connection', async (socket) => {
-    req.logger.INFO('Cliente conectado');
+    console.log('Cliente conectado');
     const products = await productManager.getProducts();
     socket.emit('products', products);
     socket.on('addProduct', async (data) => {
         try {
-            const newProduct = await productManager.addProduct(data);
             const updateProducts = await productManager.getProducts();
             io.emit('products', updateProducts);
         } catch (error) {
-            req.logger.ERROR(error.message);
+            console.log(error.message);
         }
     });
     socket.on('deleteProduct', async (data) => {
         try {
-            const idDeleted = await productManager.deleteProduct(data);
+            const idDeleted = await productManager.getProductById(data);
             const updateProducts = await productManager.getProducts();
             io.emit('products', updateProducts);
-            req.logger.INFO(idDeleted);
-            io.emit('idDeleted', idDeleted);
         }
         catch (err) {
-            req.logger.ERROR('Error: ', err)
+            console.log('Error: ', err)
         }
     });
     const messages = await messageModel.find();
@@ -85,7 +82,7 @@ io.on('connection', async (socket) => {
             socket.emit('messages', messages);
         }
         catch (err) {
-            req.logger.ERROR('Error: ', err)
+            console.log('Error: ', err)
         }
     })
 });

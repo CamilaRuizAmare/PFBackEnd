@@ -1,0 +1,16 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/styles.css">
+<title>Iniciar Sesión</title>
+
+<div class="flex">
+    <div>
+        <h2>Restablecer contraseña</h2>
+        <p>Ingresa el mail de tu cuenta y recibirás un mail para poder modificar tu contraseña</p>
+        <form action="/api/sessions/recoveryPass" method="post">
+            <label for="userName">Usuario:</label>
+            <input type="email" id="userName" name="email">
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</div>
