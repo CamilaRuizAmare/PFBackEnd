@@ -1,3 +1,5 @@
+import swaggerUi from 'swagger-ui-express';
+import spec from '../config/documentation.config.js';
 import {productsRouter} from '../controllers/products.controller.js'
 import homeRouter from '../controllers/home.controller.js';
 import {cartRouter} from '../controllers/cart.controller.js';
@@ -21,7 +23,8 @@ const routerGral = (app) => {
     app.use('/mockingproducts', mockingRouter);
     app.use('/loggerTest', testLogger);
     app.use('/api/sessions/recoveryPass', recoveryPassRouter);
-    app.use('/api/users', changeRoleRouter)
+    app.use('/api/users', changeRoleRouter);
+    app.use('/api', swaggerUi.serve, swaggerUi.setup(spec));
 }
 
 export default routerGral;

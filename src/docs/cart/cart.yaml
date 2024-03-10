@@ -1,0 +1,234 @@
+openapi: '3.1.0'
+info:
+  title: API de products
+  version: '1.0.0'
+
+paths:
+  /api/carts/:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Se han obtenido todos los carritos
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/carts'
+          "500":
+            description: Error interno del servidor
+    post:
+      summary: Crea un nuevo carrito. El mismo está ligado a la creación de un nuevo usuario.
+      tags:
+        - Carts
+      responses:
+        "201": 
+          description: Se ha creado un nuevo carrito
+          content:
+            application/json:
+              schema: 
+                type: object
+                $ref: '#/components/schemas/carts'
+        "500":
+          description: Error interno del servidor
+  /api/carts/{cid}:
+    get:
+      summary: Busca un carrito mediante el ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito buscado
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se obtuvo el carrito buscado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "404":
+          description: El carrito buscado no ha sido encontrado
+        "500": 
+          description: Error interno del servidor
+    delete:
+      summary: Elimina el contenido del carrito buscado
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito buscado para eliminar su contenido
+          schema:
+            $type: String
+      responses: 
+        "200":
+          description: Se ha eliminado todo lo que contenía el carrito buscado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "404":
+          description: El carrito buscado no ha sido encontrado
+        "500":
+          description: Error interno del servidor
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Proceso de finalización de compra para el carrito seleccionado desde el ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito buscado
+          schema:
+            $type: String
+      responses:
+        "201":
+          description: El carrito seleccionado ha finalizado su proceso de compra.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/purchases'
+        "409": 
+          description: El carrito posee todos productos que en su cantidad superan el stock actual para poder ser comprados
+        "500": 
+          description: Error interno del servidor
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Busca el carrito por ID, luego busca el producto por ID y, lo agrega al carrito o incrementa su cantidad.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito buscado
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a agregar
+          schema:
+            $type: String
+      responses:
+        "201":
+          description: Se ha añadido un nuevo producto al carrito o incrementado su cantidad
+          content:
+            application/json:
+              schema: 
+                type: object
+                $ref: '#/components/schemas/carts'
+        "404":
+          description: Carrito o producto no encontrados
+        "500": 
+          description: Error interno del servidor.
+    delete:
+      summary: Busca el carrito por ID, luego busca el producto por ID y, lo elimina del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito buscado
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a eliminar
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se ha eliminado el producto del carrito
+          content:
+            application/json:
+              schema: 
+                type: object
+                $ref: '#/components/schemas/carts'
+        "404":
+          description: Carrito o producto no encontrados
+        "500": 
+          description: Error interno del servidor.
+
+
+components:
+  schemas:
+    carts:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id del carrito en la BBDD
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                description: id del producto que se encuentra agregado al carrito. El mismo será utilizado de referencia para traer la información adicional del producto cuando sea necesario
+              quantity:
+                type: number
+                description: Cantidad agregada al carrito del producto
+      example:
+        _id: "asdd656g4sdf-22sdf3h-df34sdf"
+        products:
+          - _id: "asd56fsdf-asda6sd4-d3f4sdf"
+            quantity: 2
+          - _id: "asd56f55ghjf-asda6sd4-df88f33s"
+            quantity: 9
+    purchases:
+      type: array
+      items:
+        purchasedProducts:
+          type: object
+          properties:
+            buyer: 
+              type: string
+              description: Nombre/email de quien realiza la compra
+            products:
+              type: array
+              items:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: id del producto comprado
+                  amount:
+                    type: number
+                    description: Monto total del producto comprado
+            totalAmount:
+              type: number
+              description: Precio final de la compra realizada
+        productsInCart:
+          $ref: '#/components/schemas/carts'
+      example:
+        purchasedProducts:
+          buyer: Juan Carlos Gonzalez
+          products:
+            - _id: "asd56fsdf-asda6sd4-d3f4sdf"
+              amount: 9315
+            - _id: "asd56f55ghjf-asda6sd4-df88f33s"
+              amount: 2234
+          totalAmount: 11549
+        productsInCart:
+          _id: "asdd656g4sdf-22sdf3h-df34sdf"
+          products:
+            - _id: "asd56fsdf-asda6sd4-d3f4sdf"
+              quantity: 2
+            - _id: "asd56f55ghjf-asda6sd4-df88f33s"
+              quantity: 9
+

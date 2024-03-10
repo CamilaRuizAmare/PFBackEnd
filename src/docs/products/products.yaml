@@ -1,0 +1,207 @@
+openapi: '3.1.0'
+info:
+  title: API de products
+  version: '1.0.0'
+
+paths:
+  /products/:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Se obtuvieron todos los productos
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/products'
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Agrega un nuevo producto
+      tags:
+        - Products
+      responses:
+        "201": 
+          description: Se ha creado un nuevo producto
+          content:
+            application/json:
+              schema: 
+                type: object
+                $ref: '#/components/schemas/products'
+        "401":
+          description: Error al crear el producto
+        "409":
+          description: Error al querer agregar un producto cuyo código (code) ya ha sido agregado anteriormente.
+        "500":
+          description: Error interno del servidor
+
+  /products/{pid}:
+    get:
+      summary: Obtiene un producto por ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto buscado
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se obtuvo el producto buscado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'
+        "404":
+          description: El producto buscado no ha sido encontrado
+        "500": 
+          description: Error interno del servidor
+    put:
+      summary: Actualiza un producto, buscado por su ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto buscado para su actualización
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateProduct"
+      responses:
+        "201":
+          description: El producto buscado ha sido actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'
+        "404":
+          description: El producto buscado no ha sido encontrado
+        "500": 
+          description: Error interno del servidor
+    delete:
+      summary: Elimina un producto desde su ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto buscado para su eliminación
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El producto buscado ha sido eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'
+        "403":
+          description: El usuario que intenta eliminar el producto no posee los permisos suficientes para la acción
+        "404":
+          description: El producto buscado no ha sido encontrado
+        "500": 
+          description: Error interno del servidor
+
+components:
+  schemas:
+    products:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: id del producto en BBDD
+        title:
+          type: string
+          description: Nombre del producto
+        price:
+          type: number
+          description: Precio de producto
+        code:
+          type: string
+          description: Código único de identificación del producto
+        description:
+          type: string
+          description: Descripción del producto
+        thumbnail:
+          type: string
+          description: URL de la imagen ó imagen adjunta del producto
+        category:
+          type: string
+          description: Categoría a la que pertenece el producto
+        stock:
+          type: number
+          description: Cantidad inventariada del producto a la venta
+        owner:
+          type: string
+          description: Nombre del propietario del producto (Marca)
+      example:
+        _id: "asd56fsdf-asda6sd4-d3f4sdf"
+        title: Cuadro de gatitos
+        price: 500
+        code: G4lg6sdf8HtP5
+        description: Cuadro triple de gatitos asomandose por diferentes partes del mismo
+        thumbnail: https://tse1.mm.bing.net/th?id=OIP.gCe8cza8mOqPzeRHeld-8QHaHa&pid=Api&P=0&h=180
+        category: Decoración
+        stock: 8
+        owner: Admin
+  requestBodies:
+    updateProduct:
+      description: Datos a actualizar del producto
+      properties:
+        _id:
+          type: string
+          description: id del producto en BBDD
+          required: true
+        title:
+          type: string
+          description: Nombre del producto
+          required: true
+        price:
+          type: number
+          description: Precio de producto
+          required: true
+        code:
+          type: string
+          description: Código único de identificación del producto
+          required: true
+        description:
+          type: string
+          description: Descripción del producto
+          required: true
+        thumbnail:
+          type: string
+          description: URL de la imagen ó imagen adjunta del producto
+        category:
+          type: string
+          description: Categoría a la que pertenece el producto
+          required: true
+        stock:
+          type: number
+          description: Cantidad inventariada del producto a la venta
+          required: true
+        owner:
+          type: string
+          description: Nombre del propietario del producto (Marca)
+      example:
+        _id: "asd56fsdf-asda6sd4-d3f4sdf"
+        title: Cuadro de gatitos
+        price: 500
+        code: G4lg6sdf8HtP5
+        description: Cuadro triple de gatitos asomandose por diferentes partes del mismo
+        thumbnail: https://tse1.mm.bing.net/th?id=OIP.gCe8cza8mOqPzeRHeld-8QHaHa&pid=Api&P=0&h=180
+        category: Decoración
+        stock: 8
+        owner: Admin
