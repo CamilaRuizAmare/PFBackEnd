@@ -39,8 +39,19 @@ cartRouter.get('/:cid', passportCall('jwt'), async (req, res) => {
             req.logger.WARNING('Cart not found');
             res.status(404).json({ message: "Cart not found" });
         };
-        const productsInCart = cartByID.products
-        req.logger.INFO(cartByID);
+        const productsInCart = [];
+        cartByID.products.forEach(p => {
+            let productCart = {
+                id: p._id,
+                quantity: p.quantity,
+                /* price: p.price,
+                category: p.category,
+                description: p.description,
+                total: price * quantity */
+            }
+            productsInCart.push(productCart);
+        });
+        req.logger.INFO(productsInCart.id);
         res.status(200).render("index", {
             layout: 'cart',
             dataUser: req.user,
