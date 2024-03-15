@@ -10,7 +10,7 @@ import chatRouter from '../controllers/chat.controller.js';
 import mockingRouter from '../controllers/mocking.controller.js';
 import testLogger from '../controllers/testLogger.controller.js';
 import recoveryPassRouter from '../controllers/recoveryPass.controller.js';
-import changeRoleRouter from '../controllers/roleUser.controller.js';
+import userRouter from '../routes/api/users.js';
 
 const routerGral = (app) => {
     app.use('/products', productsRouter);
@@ -23,7 +23,7 @@ const routerGral = (app) => {
     app.use('/mockingproducts', mockingRouter);
     app.use('/loggerTest', testLogger);
     app.use('/api/sessions/recoveryPass', recoveryPassRouter);
-    app.use('/api/users', changeRoleRouter);
+    app.use('/api/users', userRouter);
     app.use('/api', swaggerUi.serve, swaggerUi.setup(spec));
 }
 

@@ -1,21 +1,3 @@
-const renderProducts = async (products) => {
-    const divProducts = document.getElementById('productsCartDiv');
-    divProducts.innerHTML = ``
-    await products.forEach((product) => {
-        divProducts.innerHTML += `
-            <div id=${product._id._id} class="product flex"> 
-                <h2>${product._id.title}</h2>
-                <ul>
-                    <li>Precio Unitario: $ ${product._id.price}</li>
-                    <li>Descripción: ${product._id.description}</li>
-                    <li>Cantidad: ${product.quantity}</li>
-                    <li>Total: $ ${product._id.price * product.quantity}</li>
-                </ul>
-            </div>
-            `
-    })
-};
-
 const addProduct = () => {
     const buttonSearch = document.getElementById('buttonSearch').value;
     let buttonProduct = document.getElementsByClassName('buttonProduct');
@@ -43,32 +25,6 @@ const addProduct = () => {
     }
 }
 
-
-
-
-const searchCart = () => {
-
-    const buttonSearch = document.getElementById('buttonSearch');
-    buttonSearch.addEventListener('click', (e) => {
-        fetch(`/api/carts/${buttonSearch.value}`)
-            .then((response) => {
-                response.json();
-            })
-            .then(async (data) => {
-                console.log(data);
-                window.location.replace(`/api/carts/${buttonSearch.value}`);
-                await renderProducts(data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    });
-
-};
-
-
-
-searchCart();
 
 addProduct();
 

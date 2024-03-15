@@ -42,22 +42,22 @@ cartRouter.get('/:cid', passportCall('jwt'), async (req, res) => {
         const productsInCart = [];
         cartByID.products.forEach(p => {
             let productCart = {
-                id: p._id,
+                id: p._id._id,
+                title: p._id.title,
+                price: p._id.price,
+                description: p._id.description,
                 quantity: p.quantity,
-                /* price: p.price,
-                category: p.category,
-                description: p.description,
-                total: price * quantity */
+                totalProduct: (p._id.price * p.quantity),
             }
             productsInCart.push(productCart);
         });
-        req.logger.INFO(productsInCart.id);
+        let total = productsInCart.reduce((sum, productCart) => sum + productCart.totalProduct, 0);
         res.status(200).render("index", {
             layout: 'cart',
             dataUser: req.user,
             productsInCart,
+            total
         })
-        /* res.status(200).json(productsInCart); */
     }
     catch (err) {
         req.logger.ERROR(err);

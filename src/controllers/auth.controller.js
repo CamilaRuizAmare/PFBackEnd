@@ -65,6 +65,8 @@ export const loginUser = async (req, res) => {
         }
         let userToToken = new userDTO(userToLogin)
         let token = generateToken(userToToken);
+        let newDate = new Date().toString()
+        await userModel.findByIdAndUpdate(userToLogin._id, {lastConection: newDate})
         res
             .status(201)
             .cookie('userToken', token, {

@@ -4,23 +4,24 @@
 <title>{{title}}</title>
 
 <div id="cartDiv" class="flex">
-    <h1>Tus carritos de compras:</h1>
+    <h1>Tus carrito de compras:</h1>
     {{!-- <div id="productsCartDiv">
 
     </div> --}}
     <div id="productsCartDiv">
         {{#each productsInCart}}
-        <div id={{this._id}}>
-            <h2>{{this._id.title}}</h2>
+        <div id={{this.id}}>
+            <h2>{{this.title}}</h2>
             <ul>
-                <li>Precio: $ {{this._id.price}}</li>
-                <li>Categoria: {{this._id.category}}</li>
-                <li>Descripción: {{this._id.description}}</li>
-                <li>Stock: {{this._id.stock}}</li>
+                <li>Precio: $ {{this.price}}</li>
+                <li>Categoria: {{this.category}}</li>
+                <li>Descripción: {{this.description}}</li>
+                <li>Cantidad: {{this.quantity}}</li>
             </ul>
-
+            <h4>Subtotal: ${{this.totalProduct}}</h4>
         </div>
         {{/each}}
+        <h4>Total compra: $ {{total}}</h4>
     </div>
 
     <div>
@@ -31,5 +32,4 @@
 
 </div>
 
-<script type="text/javascript" src="/js/indexProducts.js"></script>
 <script type="text/javascript" src="/js/indexCart.js"></script>

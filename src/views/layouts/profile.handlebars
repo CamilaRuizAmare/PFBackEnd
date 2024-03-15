@@ -6,7 +6,7 @@
 {{#if profileUser.first_name}}
 <div class="flex">
     <a href="/products">
-    <button>Volver al Home</button>
+        <button>Volver al Home</button>
     </a>
     <h1>Información de usuario</h1>
     <div class="cardUser">
@@ -20,13 +20,44 @@
         <p>{{profileUser.age}}</p>
         <h3>Perfil de usuario: </h3>
         <p>{{profileUser.role}}</p>
+        {{!-- <div>
+            {{#if profileUser.image}}
+            <img src="{{profileUser.pathImage}}" alt="Profile Image">
+            {{/if}}
+            <form action="api/users/{{profileUser._id}}/profile" method="post" enctype="multipart/form-data"
+                class="flex">
+                <input type="file" name="profileImage" id="profileImage">
+            </form>
+            <button type="submit">
+                Subir nueva foto de perfil
+            </button>
+        </div> --}}
     </div>
+
     <div class="cardUser">
         <h3>Modifica tu suscripción</h3>
+
+        <div>
+            <h4>Carga la documentación necesaria para cambiar tu suscripción a Premium</h4>
+            <span>** Si ya sos usuario Premium y querés volver a usuario regular no necesitas cargar documentación
+                alguna</span>
+            <form action="api/users/{{profileUser._id}}/documents" method="post" enctype="multipart/form-data"
+                class="flex">
+                <label for="ID">Identificación</label>
+                <input type="file" name="ID" id="ID" required>
+                <label for="address">Comprobante de domicilio</label>
+                <input type="file" name="address" id="address" required>
+                <label for="accountStatus">Comprobante de domicilio</label>
+                <input type="file" name="accountStatus" id="accountStatus" required>
+                <button type="submit">
+                    Cargar Documentación
+                </button>
+            </form>
+        </div>
         <form action="api/users/premium/{{profileUser._id}}">
-        <button type="submit">
-            Modificar
-        </button>
+            <button type="submit">
+                Modificar suscripción
+            </button>
         </form>
     </div>
     <div>

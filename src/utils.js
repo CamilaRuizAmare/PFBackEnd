@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import fs from 'fs';
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import config from './config/env.config.js';
@@ -14,10 +15,33 @@ const privateKey = config.privateKey;
 
 const storage = multer.diskStorage({
   destination: (req, res, cb) => {
-    cb(null, './src/public/img')
+    let user = req.user.user._id
+    let path = req.path
+    let pathDoc;
+    switch (path) {
+      case `/${user}/documents`:
+        pathDoc = `./src/usersDocs/${user}/documents`
+        fs.mkdirSync(pathDoc, {recursive: true})
+        break;
+      case `/${user}/profile`:
+        pathDoc = `./src/usersDocs/${user}/profile`
+        fs.mkdirSync(pathDoc, {recursive: true})
+        break;
+      case '/products':
+        pathDoc = './src/public/img/products'
+        fs.mkdirSync(pathDoc, {recursive: true})
+        break;
+      default:
+        break;
+    }
+    cb(null, pathDoc);
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname)
+    const originalName = file.originalname.split('.');
+    const fileExtension = originalName[originalName.length - 1];
+    const filename = `${file.fieldname}_${req.user.user._id}.${fileExtension}`;
+
+    cb(null, filename);
   }
 });
 
@@ -79,3 +103,5 @@ export const transport = nodemailer.createTransport({
 
 export default __dirname;
 export const uploader = multer({ storage })
+/* export const uploadProfileImage = multer({ profileImage })
+export const uploadDocuments = multer({documents}); */
