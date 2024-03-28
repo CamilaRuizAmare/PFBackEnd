@@ -26,8 +26,8 @@ productsRouter.get('/', passportCall('jwt'), authorizationUser('user', 'Premium'
             lean: true,
         }
         const products = await productModel.paginate(filter, option);
-        products.prevLink = products.hasPrevPage ? `http://localhost:8080/products/?page=${products.prevPage}` : '';
-        products.nextLink = products.hasNextPage ? `http://localhost:8080/products/?page=${products.nextPage}` : '';
+        products.prevLink = products.hasPrevPage ? `${config.urlHost}/products/?page=${products.prevPage}` : '';
+        products.nextLink = products.hasNextPage ? `${config.urlHost}/products/?page=${products.nextPage}` : '';
         return res.status(200).render("index", {
             layout: 'products',
             title: 'All Products',

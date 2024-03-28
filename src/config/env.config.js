@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-const ENV = 'development';
+const ENV = 'production';
 dotenv.config({
     path: `./.env.${ENV}`
 });
@@ -19,5 +19,6 @@ export default {
     mailUser: process.env.mailUser,
     mailPassword: process.env.mailPassword,
     serviceMail: process.env.serviceMail,
-    serviceMailPort: process.env.serviceMailPort
+    serviceMailPort: process.env.serviceMailPort,
+    urlHost: process.env.urlHost
 }
