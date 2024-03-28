@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 const collectionUsers = 'users';
 const userSchema = new mongoose.Schema({
+    _id: {type: String, default: uuidv4()},
     first_name: String,
     last_name: String,
     email: { type: String, unique: true },
@@ -16,8 +18,8 @@ const userSchema = new mongoose.Schema({
     },
     documents: [
         {
-            name: { type: String, unique: true },
-            reference: { type: String }
+            name: String,
+            reference: String 
         }
     ],
     lastConection: {type: String}

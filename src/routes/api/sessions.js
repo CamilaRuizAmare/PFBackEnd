@@ -1,6 +1,5 @@
 import express from 'express';
 import passport from "passport";
-import recoveryPassRouter from '../../controllers/recoveryPass.controller.js';
 import {newUser, loginUser, logoutUser} from '../../controllers/auth.controller.js';
 import {generateToken, passportCall, authorizationUser} from '../../utils.js'
 

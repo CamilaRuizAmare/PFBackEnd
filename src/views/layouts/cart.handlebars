@@ -5,23 +5,34 @@
 
 <div id="cartDiv" class="flex">
     <h1>Tus carrito de compras:</h1>
-    {{!-- <div id="productsCartDiv">
-
-    </div> --}}
-    <div id="productsCartDiv">
-        {{#each productsInCart}}
-        <div id={{this.id}}>
-            <h2>{{this.title}}</h2>
-            <ul>
-                <li>Precio: $ {{this.price}}</li>
-                <li>Categoria: {{this.category}}</li>
-                <li>Descripción: {{this.description}}</li>
-                <li>Cantidad: {{this.quantity}}</li>
-            </ul>
-            <h4>Subtotal: ${{this.totalProduct}}</h4>
+    <div>
+        <button type="submit" id="deleteAllCart">
+            Vaciar Carrito
+        </button>
+        <a href="/products">
+            <button>Volver al Home</button>
+        </a>
+    </div>
+    <div id="products">
+        <div id="productsCartDiv">
+            {{#each productsInCart}}
+            <div class="idProduct" value="{{this.id}}">
+                <h2>{{this.title}}</h2>
+                <ul>
+                    <li>Precio: $ {{this.price}}</li>
+                    <li>Categoria: {{this.category}}</li>
+                    <li>Descripción: {{this.description}}</li>
+                    <li>Cantidad: {{this.quantity}}</li>
+                </ul>
+                <img src="../{{this.image}}" alt="{{this.description}}">
+                <h4>Subtotal: ${{this.totalProduct}}</h4>
+                <button type="submit" class="deleteFromCart" value="{{this.id}}">
+                    Eliminar del carrito
+                </button>
+            </div>
+            {{/each}}
+            <h4>Total compra: $ {{total}}</h4>
         </div>
-        {{/each}}
-        <h4>Total compra: $ {{total}}</h4>
     </div>
 
     <div>
@@ -32,4 +43,5 @@
 
 </div>
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="/js/indexCart.js"></script>

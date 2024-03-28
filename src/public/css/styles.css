@@ -93,3 +93,11 @@ a {
     display: flex;
     flex-direction: column;
 }
+
+img {
+    margin-left: 50px;
+    margin-top: 20px;
+    width: 200px;
+    height: 200px;
+    padding: 15px;
+}

@@ -9,7 +9,6 @@ socket.on('messages', (data) => {
   })});
   
   const user = document.getElementById('user');
-  console.log(user.value);
   const message = document.getElementById('message');
   const buttonChat = document.getElementById('chat-button');
   const formChat = document.getElementById('chatForm');
@@ -19,7 +18,6 @@ socket.on('messages', (data) => {
       user: user.value,
       message: message.value
     };
-    console.log(newMessage);
     if (!newMessage.user || !newMessage.message) {
       Swal.fire({
         icon: 'error',

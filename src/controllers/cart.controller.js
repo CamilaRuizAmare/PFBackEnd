@@ -47,6 +47,7 @@ cartRouter.get('/:cid', passportCall('jwt'), async (req, res) => {
                 price: p._id.price,
                 description: p._id.description,
                 quantity: p.quantity,
+                image: p._id.thumbnail,
                 totalProduct: (p._id.price * p.quantity),
             }
             productsInCart.push(productCart);
@@ -81,12 +82,11 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
             for (const product of productsInCart) {
                 const productStock = await productManager.getProductById(product._id);
                 if (product.quantity <= productStock.stock) {
-                    productManager.updateProduct(product._id, { stock: (productStock.stock - product.quantity) });
+                    await productManager.updateProduct(product._id, { stock: (productStock.stock - product.quantity) });
                     amount += (product.quantity * product._id.price);
-                    req.logger.INFO('precio', amount, productStock.stock, product.quantity);
                     purchasedProducts.push(product);
                     const validationProduct = cartByID.products.findIndex((p) => p._id === product._id);
-                    cartByID.products.splice(validationProduct, 1);
+                    cartByID.products = cartByID.products.filter(p => p._id !== product._id);
                     await cart.updateCart(cartID, cartByID);
                 }
                 else {
@@ -100,14 +100,29 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
                     purcharser: req.user.user.email,
                 }
                 const ticketOK = await newTicket.createTicket(ticketNew);
+                const productList = [];
+                for (const product of purchasedProducts) {
+                    const productStock = await productManager.getProductById(product._id);
+                    const subTotal = productStock.price * product.quantity;
+                    const htmlList = `
+                            <h4><b>${productStock.title}:</b></h4>
+                            <ul>
+                                <li>Precio unitario: $${productStock.price}</li>
+                                <li>Subtotal por producto: $${subTotal}</li>
+                            </ul>`;
+                    productList.push(htmlList);
+                }
+                const productListToMail = productList.join('');
                 const html = `
                      <html>
                          <div>
                             <h3>${req.user.user.first_name}, tu compra fué realizada</h3>
                             <p> Los detalles de tu compra son: 
-                            ${ticketOK}</p>
+                            ${productListToMail}</p>
+                            <p>Por un monto total de $${amount}</p>
                             <h4>Recordá tener tu N° de compra al momento de recibir o retirar el pedido!</h4>
-                        </div>
+                            <h5>¡Muchas gracias por tu compra!</h5>
+                            </div>
                     </html>
                     `;
                 const infoUser = {
@@ -117,7 +132,8 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
                     html
                 };
                 const sendMail = await transport.sendMail(infoUser);
-                res.status(201).json({ 'Purchased products': sendMail, 'Products In Cart': cartByID })
+                req.logger.INFO({ 'Mail Send Success': sendMail });
+                res.status(201).json({ 'Mail Send Success': sendMail })
             } else {
                 req.logger.WARNING('The products you are trying to buy do not have available stock');
                 res.status(409).json({ 'The products you are trying to buy do not have available stock': productsOut })
@@ -131,22 +147,20 @@ cartRouter.post('/:cid/purchase', passportCall('jwt'), async (req, res) => {
 
 //Busca el carrito y agrega un producto o incrementa su cantidad.
 
-cartRouter.post('/:cid/product/:pid', passportCall('jwt'),  async (req, res) => {
+cartRouter.post('/:cid/product/:pid', passportCall('jwt'), async (req, res) => {
     try {
         const cartID = req.params.cid;
         const productID = req.params.pid;
         const cartByID = await cart.getCart(cartID);
         const productByID = await productManager.getProductById(productID);
         const user = req.user.user.email;
-        req.logger.DEBUG(productByID.owner, user)
         if (!cartByID || !productByID) {
             req.logger.WARNING('Cart or product not found');
             return res.status(404).json({ message: "Cart or product not found" });
         }
-        if(productByID.owner === user) {
-           return req.logger.WARNING('You cannot add your own products')
+        if (productByID.owner === user) {
+            return req.logger.WARNING('You cannot add your own products')
         }
-        req.logger.DEBUG(req.user.user.email);
         const validationProduct = cartByID.products.findIndex((p) => p._id._id === productID);
         if (validationProduct === -1) {
             const newProduct = {
@@ -174,7 +188,7 @@ cartRouter.delete('/:cid/product/:pid', async (req, res) => {
         const cartID = req.params.cid;
         const productID = req.params.pid;
         const cartByID = await cart.getCart(cartID);
-        const validationProduct = cartByID.products.findIndex((p) => p._id === productID);
+        const validationProduct = cartByID.products.findIndex((p) => p._id._id === productID);
         if (!cartByID || validationProduct === -1) {
             req.logger.WARNING('Cart or product not found');
             return res.status(404).json({ message: "Cart or product not found" });

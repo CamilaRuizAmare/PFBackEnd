@@ -36,11 +36,10 @@
         <div id={{this._id}} class="product flex">
             <h2>{{this.title}}</h2>
             <ul>
-                <li>Precio: $ {{this.price}}</li>
-                <li>Categoria: {{this.category}}</li>
                 <li>Descripción: {{this.description}}</li>
-                <li>Stock: {{this.stock}}</li>
+                <li>Precio: $ {{this.price}}</li>
             </ul>
+            <img src="{{this.thumbnail}}" alt="{{this.description}}">
             <button type="submit" class="buttonProduct" value={{this._id}}>Agregar al carrito</button>
         </div>
         {{/each}}

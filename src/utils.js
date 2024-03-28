@@ -21,15 +21,15 @@ const storage = multer.diskStorage({
     switch (path) {
       case `/${user}/documents`:
         pathDoc = `./src/usersDocs/${user}/documents`
-        fs.mkdirSync(pathDoc, {recursive: true})
+        fs.mkdirSync(pathDoc, { recursive: true })
         break;
       case `/${user}/profile`:
         pathDoc = `./src/usersDocs/${user}/profile`
-        fs.mkdirSync(pathDoc, {recursive: true})
+        fs.mkdirSync(pathDoc, { recursive: true })
         break;
-      case '/products':
+      case '/':
         pathDoc = './src/public/img/products'
-        fs.mkdirSync(pathDoc, {recursive: true})
+        fs.mkdirSync(pathDoc, { recursive: true })
         break;
       default:
         break;
@@ -37,10 +37,28 @@ const storage = multer.diskStorage({
     cb(null, pathDoc);
   },
   filename: (req, file, cb) => {
-    const originalName = file.originalname.split('.');
-    const fileExtension = originalName[originalName.length - 1];
-    const filename = `${file.fieldname}_${req.user.user._id}.${fileExtension}`;
-
+    let user = req.user.user._id
+    let path = req.path
+    let originalName;
+    let fileExtension;
+    let filename;
+    switch (path) {
+      case `/${user}/documents`:
+        originalName = file.originalname.split('.');
+        fileExtension = originalName[originalName.length - 1];
+        filename = `${file.fieldname}_${req.user.user._id}.${fileExtension}`;
+        break;
+      case `/${user}/profile`:
+        originalName = file.originalname.split('.');
+        fileExtension = originalName[originalName.length - 1];
+        filename = `${file.fieldname}_${req.user.user._id}.${fileExtension}`;
+        break;
+      case '/':
+        filename = file.originalname;
+        break;
+      default:
+        break;
+    }
     cb(null, filename);
   }
 });
@@ -62,13 +80,13 @@ export const tokenToRecoveryPass = (user, date) => {
 }
 
 
-export const authorizationUser = (role1, role2) => {
+export const authorizationUser = (role1, role2, role3) => {
   return async (req, res, next) => {
     if (!req.user) {
       req.logger.ERROR('You must be logged in')
       return res.status(401).send({ error: 'Unauthorized user' })
     };
-    if (req.user.user.role != role1 && req.user.user.role != role2) {
+    if (req.user.user.role != role1 && req.user.user.role != role2 && req.user.user.role != role3) {
       req.logger.ERROR('User without permissions')
       return res.status(403).send({ error: 'User without permissions' })
     }
@@ -103,5 +121,3 @@ export const transport = nodemailer.createTransport({
 
 export default __dirname;
 export const uploader = multer({ storage })
-/* export const uploadProfileImage = multer({ profileImage })
-export const uploadDocuments = multer({documents}); */

@@ -1,0 +1,46 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/styles.css">
+<title>Usuarios del ecommerce</title>
+
+<div class="flex">
+    <a href="/realTimeProducts">
+        <button>Volver al Home</button>
+    </a>
+    <div>
+        <div class="flex">
+            <h1>Todos los usuarios</h1>
+            {{#each infoUser}}
+            <div id="idUser" class="{{this.id}}">
+                <ul>
+                    <li><b>Nombre:</b> {{this.name}}</li>
+                    <li><b>Apellido:</b> {{this.lastName}}</li>
+                    <li><b>Email:</b> {{this.email}}</li>
+                    <li><b>Rol/Perfil:</b> {{this.profileType}}</li>
+                </ul>
+                <form action="/api/users/{{this.id}}">
+                    <button type="submit">
+                        Modificar Rol Premium/Regular
+                    </button>
+                </form>
+                <button type="submit" class="deleteUser" value={{this.id}}>
+                    Eliminar usuario
+                </button>
+            </div>
+            {{/each}}
+            <div class="flex">
+                <h2>Eliminar usuarios inactivos</h2>
+                <p>Recuerde que no es posible deshacer dicha acción. Los usuarios con más de 48 hs de inactividad serán
+                    notificados vía mail y eliminados de la base de datos de clientes.</p>
+                <form>
+                    <button type="submit" id="deleteInactiveUsers">
+                        Eliminar usuarios inactivos
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="/js/indexUsers.js"></script>

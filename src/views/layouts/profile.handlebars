@@ -20,18 +20,6 @@
         <p>{{profileUser.age}}</p>
         <h3>Perfil de usuario: </h3>
         <p>{{profileUser.role}}</p>
-        {{!-- <div>
-            {{#if profileUser.image}}
-            <img src="{{profileUser.pathImage}}" alt="Profile Image">
-            {{/if}}
-            <form action="api/users/{{profileUser._id}}/profile" method="post" enctype="multipart/form-data"
-                class="flex">
-                <input type="file" name="profileImage" id="profileImage">
-            </form>
-            <button type="submit">
-                Subir nueva foto de perfil
-            </button>
-        </div> --}}
     </div>
 
     <div class="cardUser">
@@ -64,7 +52,14 @@
         <a href="/realTimeProducts">
             <button>
                 Editar Productos
-            </button></a>
+            </button>
+        </a>
+        <a href="/api/users/">
+            <button>
+                Editar Usuarios
+            </button>
+        </a>
+
     </div>
 </div>
 {{else}}

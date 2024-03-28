@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const collectionProducts = 'Products';
 const productSchema = new mongoose.Schema({
-    _id: {type: String, default: uuidv4()},
+    _id: {type: String, default: uuidv4(), unique: true},
     title: String,
     price: Number,
     code: {

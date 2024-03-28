@@ -17,7 +17,7 @@ recoveryPassRouter.post('/', async (req, res) => {
         const userRecovery = await userModel.findOne({ email });
         if (!userRecovery) {
             req.logger.WARNING('User not found');
-            return res.status(404).send('User not found');
+            return res.status(404).json('User not found');
         }
         const dateExpires = Date.now() + 3600000
         const token = tokenToRecoveryPass(email, Date.now());
@@ -37,7 +37,6 @@ recoveryPassRouter.post('/', async (req, res) => {
             subject: 'Recupera tu contraseña',
             html
         };
-        req.logger.INFO(infoUser)
         const mailSend = await transport.sendMail(infoUser);
         return res.status(200).json({ message: 'Correo enviado! Revisa tu casilla' });
     } catch (error) {

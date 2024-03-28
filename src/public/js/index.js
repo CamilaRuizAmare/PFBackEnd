@@ -10,60 +10,20 @@ socket.on('products', (data) => {
             <h2>${product.title}</h2>
             <li>Precio: $ ${product.price}</li>
             <li>Descripcion: ${product.description}</li>
+            <li> Código interno: ${product.code}</li>
             <li>Stock: ${product.stock}</li>
-            </ul>
+            <li>Propietario: ${product.owner}</li>
+        </ul>
+        <img src="${product.thumbnail}" alt="${product.description}" />
     </div>`;
   });
 });
 
 
 
-//const addProduct = document.getElementById('addProductButton');
 const deleteProduct = document.getElementById('deleteProductButton');
 const formAddProduct = document.getElementById('addProduct');
 const formDeleteProduct = document.getElementById('deleteProduct');
-/* addProduct.addEventListener('click', (e) => {
-  e.preventDefault();
-  let title = document.getElementById('title').value;
-  let description = document.getElementById('description').value;
-  let code = document.getElementById('code').value;
-  let price = document.getElementById('price').value;
-  let stock = document.getElementById('stock').value;
-  let thumbnail = document.getElementById('thumbnail').value;
-
-  if (!title || !description || !code || !price || !stock) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Información incompleta',
-      text: 'Alguno de los campos se encuentra vacío, por favor completar',
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true,
-    });
-    return;
-  }
-  const newProduct = {
-    title: title,
-    description: description,
-    code: code,
-    price: price,
-    stock: stock,
-    thumbnail: thumbnail || 'Sin imagen'
-  };
-  socket.emit('addProduct', newProduct);
-  Swal.fire({
-    icon: 'success',
-    title: 'Producto Agregado',
-    text: `El producto ${newProduct.title} fue agregado exitosamente`,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 1500,
-    timerProgressBar: true,
-  });
-  formAddProduct.reset();
-}); */
-
 
 deleteProduct.addEventListener('click', async (e) => {
   e.preventDefault();
@@ -78,24 +38,26 @@ deleteProduct.addEventListener('click', async (e) => {
     confirmButtonText: 'Borrar'
   }).then((result) => {
     if (result.isConfirmed) {
-          Swal.fire({
-            title: 'Producto Borrado',
-            text: `El producto bajo el ID ${idToDelete} ha sido eliminado`,
-            icon: 'success',
-            timer: 1500,
-            showConfirmButton: false
-          });     
+      fetch(`/products/${idToDelete}`, { method: 'delete' })
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => {
+        Swal.fire({
+          title: 'Producto Borrado',
+          text: `El producto bajo el ID ${idToDelete} ha sido eliminado`,
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        });     
+        formDeleteProduct.reset();
+        location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+          
     }
   })
-  fetch(`/products/${idToDelete}`, { method: 'delete' })
-    .then((response) => {
-      response.json();
-    })
-    .then((data) => {
-      formDeleteProduct.reset();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
 });
 
